@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Foo
+namespace Foo.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for FirstChildView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class FirstChildView : UserControl
     {
-        public MainWindow()
+        public FirstChildView()
         {
             InitializeComponent();
         }
