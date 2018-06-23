@@ -28,29 +28,5 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
-        <!-- Row 1 -->
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=FullName, Mode=OneWay}"
-                   Grid.ColumnSpan="2"/>
-
-        <!-- Row 2 -->
-        <TextBox MinWidth="100" Grid.Row="2" Grid.Column="1" x:Name="FirstName"></TextBox>
-        <TextBox MinWidth="100" Grid.Row="2" Grid.Column="2" x:Name="LastName"></TextBox>
-
-        <!-- Row 3 -->
-        <ComboBox Grid.Row="3" Grid.Column="1" x:Name="People"
-                  SelectedItem="{Binding Path=SelectedPerson, Mode=OneWayToSource}"
-                  DisplayMemberPath="FirstName"/>
-        <TextBlock Grid.Row="3" Grid.Column="2" x:Name="SelectedPerson_LastName"/>
-
-        <!-- Row 4 -->
-        <Button x:Name="ClearText" Grid.Row="4" Grid.Column="1">Clear Names</Button>
-    
-        <!-- Row 5 -->
-        <Button x:Name="LoadPageOne" Grid.Row="5" Grid.Column="1">Load First Page</Button>
-        <Button x:Name="LoadPageTwo" Grid.Row="5" Grid.Column="2">Load Second Page</Button>
-        
-        <!-- Row 6 -->
-        <ContentControl Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="5"
-                        x:Name="ActiveItem"/>
     </Grid>
 </Window>
