@@ -54,7 +54,7 @@
                 <materialDesign:PopupBox HorizontalAlignment="Right" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False" Height="60">
                     <StackPanel Width="150">
                         <!-- TODO: LoadSettingsView -->
-                        <Button x:Name="LoadSettingsView" Content="Settings" Click="LoadSettingsView_Click"/>
+                        <Button x:Name="LoadSettingsView" Content="Settings"/>
                         <Separator/>
                         <Button x:Name="ButtonPopUpQuit" Content="Quit" Click="ButtonPopUpQuit_Click"/>
                     </StackPanel>
