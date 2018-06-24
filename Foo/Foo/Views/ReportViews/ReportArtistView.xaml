@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Foo.Views.Form3View"
+﻿<UserControl x:Class="Foo.Views.ReportArtistView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -30,7 +30,7 @@
                 <RowDefinition Height="10"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="1" Grid.Column="2" FontSize="30" FontFamily="Segoe UI Light" Foreground="Black">Form3</TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="2" FontSize="30" FontFamily="Segoe UI Light" Foreground="Black">Report Artists</TextBlock>
         </Grid>
 
         <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
@@ -47,6 +47,18 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="10"/>
             </Grid.RowDefinitions>
+
+            <ListView Grid.Row="2" Grid.Column="2" x:Name="ArtistList" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="auto" Header="Id" DisplayMemberBinding="{Binding Path=Id}"/>
+                        <GridViewColumn Width="auto" Header="Firstname" DisplayMemberBinding="{Binding Path=Firstname}"/>
+                        <GridViewColumn Width="auto" Header="Lastname" DisplayMemberBinding="{Binding Path=Lastname}"/>
+                        <GridViewColumn Width="auto" Header="Country" DisplayMemberBinding="{Binding Path=Country}"/>
+                        <GridViewColumn Width="auto" Header="Birthdate" DisplayMemberBinding="{Binding Path=Birthdate, StringFormat={}{0:d MMMM yyyy}}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
         </Grid>
     </Grid>
 </UserControl>

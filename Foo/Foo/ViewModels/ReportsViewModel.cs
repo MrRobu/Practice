@@ -23,5 +23,10 @@ namespace Foo.ViewModels
         {
             ActivateItem(new Report3ViewModel());
         }
+
+        public void LoadReportArtistView()
+        {
+            ActivateItem(new ReportArtistViewModel());
+        }
     }
 }

@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace Foo.Models
 {
-    public class TrackModel
+    public class Track_GenreModel
     {
-        public int Id { get; set; }
-
-        public string Title { get; set; }
-
-        public string Length { get; set; }
+        public int TrackId { get; set; }
+        public int GenreId { get; set; }
     }
 }

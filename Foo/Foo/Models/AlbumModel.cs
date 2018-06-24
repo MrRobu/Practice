@@ -13,5 +13,7 @@ namespace Foo.Models
         public string Title { get; set; }
 
         public int ArtistId { get; set; }
+
+        public int BandId { get; set; }
     }
 }

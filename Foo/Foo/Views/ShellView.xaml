@@ -64,7 +64,7 @@
 
         <Grid Grid.Row="2" x:Name="GridMenu" Width="60" HorizontalAlignment="Left" Background="#FF113869">
             <StackPanel>
-                <Grid Height="150" Background="White">
+                <Grid Height="160" Background="White">
                     <Button x:Name="ButtonCloseMenu" Width="60" Height="60" Background="{x:Null}" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Right" Visibility="Collapsed" Click="ButtonCloseMenu_Click">
                         <materialDesign:PackIcon Foreground="#FF2C3082" Kind="ArrowLeft" Width="25" Height="25"/>
                     </Button>
@@ -74,7 +74,6 @@
                 </Grid>
                 <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="#FF2491F7">
                     <ListViewItem Height="60" Padding="0">
-                        <!-- TODO: Event on ListView not Button -->
                         <Button x:Name="LoadDashBoardView" Padding="0" Background="{x:Null}" Foreground="#FF2491F7" BorderThickness="0" Height="60">
                             <StackPanel Orientation="Horizontal" Width="200">
                                 <materialDesign:PackIcon Kind="ViewDashboard" Width="25" Height="25" Margin="18" VerticalAlignment="Center"/>
@@ -83,7 +82,6 @@
                         </Button>
                     </ListViewItem>
                     <ListViewItem Height="60" Padding="0">
-                        <!-- TODO: Event on ListView not Button -->
                         <Button x:Name="LoadMusicView" Padding="0" Background="{x:Null}" Foreground="#FF2491F7" BorderThickness="0" Height="60">
                             <StackPanel Orientation="Horizontal" Width="200">
                                 <materialDesign:PackIcon Kind="Music" Width="25" Height="25" Margin="18" VerticalAlignment="Center"/>
@@ -92,7 +90,6 @@
                         </Button>
                     </ListViewItem>
                     <ListViewItem Height="60" Padding="0">
-                        <!-- TODO: Event on ListView not Button -->
                         <Button x:Name="LoadFormsView" Padding="0" Background="{x:Null}" Foreground="#FF2491F7" BorderThickness="0" Height="60">
                             <StackPanel Orientation="Horizontal" Width="200">
                                 <materialDesign:PackIcon Kind="Pencil" Width="25" Height="25" Margin="18" VerticalAlignment="Center"/>
@@ -101,7 +98,6 @@
                         </Button>
                     </ListViewItem>
                     <ListViewItem Height="60" Padding="0">
-                        <!-- TODO: Event on ListView not Button -->
                         <Button x:Name="LoadReportsView" Padding="0" Background="{x:Null}" Foreground="#FF2491F7" BorderThickness="0" Height="60">
                             <StackPanel Orientation="Horizontal" Width="200">
                                 <materialDesign:PackIcon Kind="FileDocument" Width="25" Height="25" Margin="18" VerticalAlignment="Center"/>
@@ -110,7 +106,6 @@
                         </Button>
                     </ListViewItem>
                     <ListViewItem Height="60" Padding="0">
-                        <!-- TODO: Event on ListView not Button -->
                         <Button x:Name="LoadSearchView" Padding="0" Background="{x:Null}" Foreground="#FF2491F7" BorderThickness="0" Height="60">
                             <StackPanel Orientation="Horizontal" Width="200">
                                 <materialDesign:PackIcon Kind="DatabaseSearch" Width="25" Height="25" Margin="18" VerticalAlignment="Center"/>
