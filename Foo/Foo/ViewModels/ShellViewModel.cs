@@ -7,35 +7,46 @@ using System.Threading.Tasks;
 using System.Data.Odbc;
 using System.Data;
 using System.Windows;
+using Dapper;
+using Foo.Models;
 
 namespace Foo.ViewModels
 {
     public class ShellViewModel : Conductor<object>
     {
-        OdbcConnection connection;
         public ShellViewModel()
         {
-            OpenConnection();
+            ActivateItem(new DashboardViewModel());
         }
 
-        public void OpenConnection()
+        public void LoadDashboardView()
         {
-            try
-            {
-                connection = new OdbcConnection(Helper.ConnectionString("postgres"));
-                connection.Open();
-                
-                MessageBox.Show("Connection Open");
-                connection.Close();
-            }
-            catch (OdbcException error)
-            {
-                MessageBox.Show(error.Message);
-                if (connection?.State == ConnectionState.Open)
-                {
-                    connection.Close();
-                }
-            }
+            ActivateItem(new DashboardViewModel());
+        }
+
+        public void LoadMusicView()
+        {
+            ActivateItem(new MusicViewModel());
+        }
+
+        public void LoadFormsView()
+        {
+            ActivateItem(new FormsViewModel());
+        }
+
+        public void LoadReportsView()
+        {
+            ActivateItem(new ReportsViewModel());
+        }
+
+        public void LoadSearchView()
+        {
+            ActivateItem(new SearchViewModel());
+        }
+
+        public void LoadSettingsView()
+        {
+            ActivateItem(new SettingsViewModel());
         }
     }
 }

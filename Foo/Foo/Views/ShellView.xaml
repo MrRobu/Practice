@@ -4,29 +4,127 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Foo.Views"
+        xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro.Platform"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="ShellView" Height="450" Width="565.905" WindowStartupLocation="CenterScreen">
-    <Grid>
+        Title="Foo" Height="700" Width="1080" WindowStartupLocation="CenterScreen" 
+        ResizeMode="NoResize" Foreground="White" WindowStyle="None">
+    <Window.Resources>
+        <Storyboard x:Key="MenuOpen">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="60"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="200"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="MenuClose">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="200"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="60"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </Window.Resources>
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonOpenMenu">
+            <BeginStoryboard Storyboard="{StaticResource MenuOpen}">
+
+            </BeginStoryboard>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonCloseMenu">
+            <BeginStoryboard Storyboard="{StaticResource MenuClose}">
+
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+
+    <Grid Background="LightGray">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
+        <Grid Grid.Row="1" Grid.ColumnSpan="2" x:Name="TitleBar" Height="60" VerticalAlignment="Top" Background="#FF2491F7" MouseDown="TitleBar_MouseDown">
+            <TextBlock Text="Foo Backend" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" FontFamily="Segoe UI Light" Margin="479,15,483,15"/>
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
+                <materialDesign:PopupBox HorizontalAlignment="Right" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False" Height="60">
+                    <StackPanel Width="150">
+                        <!-- TODO: LoadSettingsView -->
+                        <Button x:Name="LoadSettingsView" Content="Settings" Click="LoadSettingsView_Click"/>
+                        <Separator/>
+                        <Button x:Name="ButtonPopUpQuit" Content="Quit" Click="ButtonPopUpQuit_Click"/>
+                    </StackPanel>
+                </materialDesign:PopupBox>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="2" x:Name="GridMenu" Width="60" HorizontalAlignment="Left" Background="#FF113869">
+            <StackPanel>
+                <Grid Height="150" Background="White">
+                    <Button x:Name="ButtonCloseMenu" Width="60" Height="60" Background="{x:Null}" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Right" Visibility="Collapsed" Click="ButtonCloseMenu_Click">
+                        <materialDesign:PackIcon Foreground="#FF2C3082" Kind="ArrowLeft" Width="25" Height="25"/>
+                    </Button>
+                    <Button x:Name="ButtonOpenMenu" Width="60" Height="60" Background="{x:Null}" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Right" Click="ButtonOpenMenu_Click">
+                        <materialDesign:PackIcon Foreground="#FF2C3082" Kind="Menu" Width="25" Height="25"/>
+                    </Button>
+                </Grid>
+                <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="#FF2491F7">
+                    <ListViewItem Height="60" Padding="0">
+                        <!-- TODO: Event on ListView not Button -->
+                        <Button x:Name="LoadDashBoardView" Padding="0" Background="{x:Null}" Foreground="#FF2491F7" BorderThickness="0" Height="60">
+                            <StackPanel Orientation="Horizontal" Width="200">
+                                <materialDesign:PackIcon Kind="ViewDashboard" Width="25" Height="25" Margin="18" VerticalAlignment="Center"/>
+                                <TextBlock Text="Dashboard" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </ListViewItem>
+                    <ListViewItem Height="60" Padding="0">
+                        <!-- TODO: Event on ListView not Button -->
+                        <Button x:Name="LoadMusicView" Padding="0" Background="{x:Null}" Foreground="#FF2491F7" BorderThickness="0" Height="60">
+                            <StackPanel Orientation="Horizontal" Width="200">
+                                <materialDesign:PackIcon Kind="Music" Width="25" Height="25" Margin="18" VerticalAlignment="Center"/>
+                                <TextBlock Text="Music" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </ListViewItem>
+                    <ListViewItem Height="60" Padding="0">
+                        <!-- TODO: Event on ListView not Button -->
+                        <Button x:Name="LoadFormsView" Padding="0" Background="{x:Null}" Foreground="#FF2491F7" BorderThickness="0" Height="60">
+                            <StackPanel Orientation="Horizontal" Width="200">
+                                <materialDesign:PackIcon Kind="Pencil" Width="25" Height="25" Margin="18" VerticalAlignment="Center"/>
+                                <TextBlock Text="Forms" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </ListViewItem>
+                    <ListViewItem Height="60" Padding="0">
+                        <!-- TODO: Event on ListView not Button -->
+                        <Button x:Name="LoadReportsView" Padding="0" Background="{x:Null}" Foreground="#FF2491F7" BorderThickness="0" Height="60">
+                            <StackPanel Orientation="Horizontal" Width="200">
+                                <materialDesign:PackIcon Kind="FileDocument" Width="25" Height="25" Margin="18" VerticalAlignment="Center"/>
+                                <TextBlock Text="Reports" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </ListViewItem>
+                    <ListViewItem Height="60" Padding="0">
+                        <!-- TODO: Event on ListView not Button -->
+                        <Button x:Name="LoadSearchView" Padding="0" Background="{x:Null}" Foreground="#FF2491F7" BorderThickness="0" Height="60">
+                            <StackPanel Orientation="Horizontal" Width="200">
+                                <materialDesign:PackIcon Kind="DatabaseSearch" Width="25" Height="25" Margin="18" VerticalAlignment="Center"/>
+                                <TextBlock Text="Search" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </ListViewItem>
+                </ListView>
+            </StackPanel>
+        </Grid>
+            
+        <!-- TODO: Container without margin -->
+        <Grid Grid.Column="2" Grid.Row="2" Margin="0,60,0,0">
+            <ContentControl x:Name="ActiveItem"/>
+        </Grid>
     </Grid>
 </Window>
