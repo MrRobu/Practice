@@ -34,9 +34,12 @@
 
             <TextBlock Grid.Row="0" Grid.Column="0" FontSize="40" FontFamily="Segoe UI Light" Foreground="Black">Reports</TextBlock>
 
-            <Button x:Name="LoadReport1View" Content="Report1" Grid.Row="1" Grid.Column="3" Margin="10"/>
-            <Button x:Name="LoadReport2View" Content="Report2" Grid.Row="1" Grid.Column="4" Margin="10"/>
-            <Button x:Name="LoadReport3View" Content="Report3" Grid.Row="1" Grid.Column="5" Margin="10"/>
+            <StackPanel Grid.Column="6" HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button x:Name="LoadReport1View" Content="Report1" Grid.Row="1" Grid.Column="2" Height="auto" Background="Transparent" BorderThickness="0" Foreground="#FF113869"/>
+                <Button x:Name="LoadReport2View" Content="Report2" Grid.Row="1" Grid.Column="3" Height="auto" Background="Transparent" BorderThickness="0" Foreground="#FF113869"/>
+                <Button x:Name="LoadReport3View" Content="Report3" Grid.Row="1" Grid.Column="4" Height="auto" Background="Transparent" BorderThickness="0" Foreground="#FF113869"/>
+                <Button x:Name="LoadReportArtistView" Content="Report Artist" Grid.Row="1" Grid.Column="5" Height="auto" Background="Transparent" BorderThickness="0" Foreground="#FF113869"/>
+            </StackPanel>
         </Grid>
 
         <Grid Grid.Row="3" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3">

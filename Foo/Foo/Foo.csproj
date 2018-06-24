@@ -46,6 +46,9 @@
     <Reference Include="Dapper, Version=1.50.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.1.50.5\lib\net451\Dapper.dll</HintPath>
     </Reference>
+    <Reference Include="Dapper.Mapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.Mapper.2.0.0\lib\net451\Dapper.Mapper.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialDesignColors, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.1.1.2\lib\net45\MaterialDesignColors.dll</HintPath>
     </Reference>
@@ -86,11 +89,13 @@
     <Compile Include="Models\BandModel.cs" />
     <Compile Include="Models\GenreModel.cs" />
     <Compile Include="Models\TrackModel.cs" />
+    <Compile Include="Models\Track_GenreModel.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\FormsViewModels\Form1ViewModel.cs" />
     <Compile Include="ViewModels\FormsViewModels\Form2ViewModel.cs" />
     <Compile Include="ViewModels\FormsViewModels\Form3ViewModel.cs" />
     <Compile Include="ViewModels\FormsViewModel.cs" />
+    <Compile Include="ViewModels\ReportsViewModels\ReportArtistViewModel.cs" />
     <Compile Include="ViewModels\MusicViewModel.cs" />
     <Compile Include="ViewModels\ReportsViewModels\Report1ViewModel.cs" />
     <Compile Include="ViewModels\ReportsViewModels\Report2ViewModel.cs" />
@@ -101,6 +106,9 @@
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\DashboardView.xaml.cs">
       <DependentUpon>DashboardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportViews\ReportArtistView.xaml.cs">
+      <DependentUpon>ReportArtistView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\FormViews\Form1View.xaml.cs">
       <DependentUpon>Form1View.xaml</DependentUpon>
@@ -174,6 +182,10 @@
   <ItemGroup />
   <ItemGroup>
     <Page Include="Views\DashboardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReportViews\ReportArtistView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

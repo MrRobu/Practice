@@ -10,11 +10,11 @@ namespace Foo.Models
     {
         public int Id { get; set; }
 
-        public string StageName { get; set; }
+        public string Stagename { get; set; }
 
-        public string FirstName { get; set; }
+        public string Firstname { get; set; }
 
-        public string LastName { get; set; }
+        public string Lastname { get; set; }
 
         public string Country { get; set; }
 

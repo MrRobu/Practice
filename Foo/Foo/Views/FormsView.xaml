@@ -29,16 +29,16 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" FontSize="40" FontFamily="Segoe UI Light" Foreground="Black">Forms</TextBlock>
 
-            <Button x:Name="LoadForm1View" Content="Form1" Grid.Row="1" Grid.Column="3" Margin="10"/>
-            <Button x:Name="LoadForm2View" Content="Form2" Grid.Row="1" Grid.Column="4" Margin="10"/>
-            <Button x:Name="LoadForm3View" Content="Form3" Grid.Row="1" Grid.Column="5" Margin="10"/>
+            <StackPanel Grid.Column="6" HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button x:Name="LoadForm1View" Content="Report1" Grid.Row="1" Grid.Column="2" Height="auto" Background="Transparent" BorderThickness="0" Foreground="#FF113869"/>
+                <Button x:Name="LoadForm2View" Content="Report2" Grid.Row="1" Grid.Column="3" Height="auto" Background="Transparent" BorderThickness="0" Foreground="#FF113869"/>
+                <Button x:Name="LoadForm3View" Content="Report3" Grid.Row="1" Grid.Column="4" Height="auto" Background="Transparent" BorderThickness="0" Foreground="#FF113869"/>
+            </StackPanel>
         </Grid>
 
         <Grid Grid.Row="3" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3">
