@@ -16,6 +16,7 @@ namespace Foo.ViewModels
     {
         public ShellViewModel()
         {
+            Instance = this;
             ActivateItem(new DashboardViewModel());
         }
 
@@ -24,29 +25,46 @@ namespace Foo.ViewModels
             ActivateItem(new DashboardViewModel());
         }
 
-        public void LoadMusicView()
+        public void LoadArtistsView()
         {
-            ActivateItem(new MusicViewModel());
+            ActivateItem(new ArtistsViewModel());
         }
 
-        public void LoadFormsView()
+        public void LoadAlbumsView()
         {
-            ActivateItem(new FormsViewModel());
+            ActivateItem(new AlbumsViewModel());
         }
 
-        public void LoadReportsView()
+        public void LoadBandsView()
         {
-            ActivateItem(new ReportsViewModel());
+            ActivateItem(new BandsViewModel());
         }
 
-        public void LoadSearchView()
+        public void LoadTracksView()
         {
-            ActivateItem(new SearchViewModel());
+            ActivateItem(new BandsViewModel());
+        }
+
+        public void LoadPlaylistsView()
+        {
+            ActivateItem(new PlaylistsViewModel());
+        }
+
+        public void LoadGenresView()
+        {
+            ActivateItem(new PlaylistsViewModel());
+        }
+
+        public void LoadFooUsersView()
+        {
+            ActivateItem(new FooUsersViewModel());
         }
 
         public void LoadSettingsView()
         {
             ActivateItem(new SettingsViewModel());
         }
+
+        public static ShellViewModel Instance { get; private set; }
     }
 }

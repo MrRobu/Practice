@@ -1,75 +1,555 @@
-﻿DROP TABLE IF EXISTS Track CASCADE;
-DROP TABLE IF EXISTS Album CASCADE;
+﻿DROP TABLE IF EXISTS Album CASCADE;
+DROP TABLE IF EXISTS AlbumTrack CASCADE;
 DROP TABLE IF EXISTS Artist CASCADE;
+DROP TABLE IF EXISTS ArtistAlbum CASCADE;
+DROP TABLE IF EXISTS ArtistGenre CASCADE;
 DROP TABLE IF EXISTS Band CASCADE;
+DROP TABLE IF EXISTS BandGenre CASCADE;
+DROP TABLE IF EXISTS BandArtist CASCADE;
+DROP TABLE IF EXISTS BandAlbum CASCADE;
+DROP TABLE IF EXISTS FooUser CASCADE;
 DROP TABLE IF EXISTS Genre CASCADE;
-DROP TABLE IF EXISTS Track_Genre CASCADE;
-DROP TABLE IF EXISTS Album_Track CASCADE;
-DROP TABLE IF EXISTS Band_Artist CASCADE;
+DROP TABLE IF EXISTS Playlist CASCADE;
+DROP TABLE IF EXISTS PlaylistTrack CASCADE;
+DROP TABLE IF EXISTS Track CASCADE;
+DROP TABLE IF EXISTS AlbumReview CASCADE;
+DROP TABLE IF EXISTS TrackReview CASCADE;
+DROP TABLE IF EXISTS BandReview CASCADE;
+DROP TABLE IF EXISTS ArtistReview CASCADE;
+
+CREATE TABLE Genre(
+	ID SERIAL
+		CONSTRAINT PK_Genre PRIMARY KEY,
+	Title VARCHAR(64) NOT NULL
+);
 
 CREATE TABLE Artist(
-    Id SERIAL
-    	CONSTRAINT PK_Artist PRIMARY KEY,
-	StageName VARCHAR(40)
-		CONSTRAINT NN_Artist_StageName NOT NULL,
-    FirstName VARCHAR(40)
-    	CONSTRAINT NN_Artist_FirstName NOT NULL,
-	LastName VARCHAR(40)
-    	CONSTRAINT NN_Artist_LastName NOT NULL,
-    Country VARCHAR(40),
+	ID SERIAL
+		CONSTRAINT PK_Artist PRIMARY KEY,
+	StageName VARCHAR(32),
+	FirstName VARCHAR(32) NOT NULL,
+	LastName VARCHAR(32) NOT NULL,
+	Origin VARCHAR(32),
 	Birthdate DATE
 );
 
-CREATE TABLE Genre(
-	Id SERIAL
-		CONSTRAINT PK_Genre PRIMARY KEY,
-	Name VARCHAR(25)
-		CONSTRAINT NN_Genre_Name NOT NULL
-);
-
-CREATE TABLE Track(
-	Id SERIAL
-    	CONSTRAINT PK_Track PRIMARY KEY,
-	Title VARCHAR(255)
-    	CONSTRAINT NN_Track_Title NOT NULL,   
-    Length VARCHAR(25)
-);
-
-CREATE TABLE Track_Genre(
-	TrackId INTEGER
-		CONSTRAINT FK_Track_Genre_TrackId REFERENCES Track(Id),
-	GenreId INTEGER
-		CONSTRAINT FK_Track_Genre_GenreId REFERENCES Genre(Id)
+CREATE TABLE ArtistGenre(
+	ArtistID INTEGER NOT NULL
+		CONSTRAINT FK_ArtistGenre_Artist REFERENCES Artist(ID),
+	GenreID INTEGER NOT NULL
+		CONSTRAINT FK_ArtistGenre_Genre REFERENCES Genre(ID),
+	CONSTRAINT UN_ArtistGenre UNIQUE(ArtistID,GenreID)
 );
 
 CREATE TABLE Band(
-	Id SERIAL
-        CONSTRAINT PK_Band PRIMARY KEY
-        CONSTRAINT NN_Band_Id NOT NULL,
-    Name VARCHAR(255),     
-    Country VARCHAR(255)
-); 
+	ID SERIAL
+		CONSTRAINT PK_Band PRIMARY KEY,
+	Name VARCHAR(64) NOT NULL,
+	Origin VARCHAR(64)
+);
+
+CREATE TABLE BandArtist(
+	BandID INTEGER NOT NULL
+		CONSTRAINT FK_BandArtist_Band REFERENCES Band(ID),
+	ArtistID INTEGER NOT NULL
+		CONSTRAINT FK_BandArtist_Artist REFERENCES Artist(ID),
+	CONSTRAINT UN_BandArtist UNIQUE (BandID,ArtistID)
+);
+
+CREATE TABLE FooUser(
+	ID SERIAL
+		CONSTRAINT PK_FooUser PRIMARY KEY,
+	UserName VARCHAR(32) NOT NULL
+		CONSTRAINT UN_FooUser_UserName UNIQUE,
+	FirstName VARCHAR(32) NOT NULL,
+	LastName VARCHAR(32) NOT NULL,
+	Email VARCHAR(32) NOT NULL,
+	Password VARCHAR(32) NOT NULL
+);
+
+CREATE TABLE BandGenre(
+	BandID INTEGER NOT NULL
+		CONSTRAINT FK_BandGenre_Band REFERENCES Band(ID),
+	GenreID INTEGER NOT NULL
+		CONSTRAINT FK_BandGenre_Genre REFERENCES Genre(ID),
+	CONSTRAINT UN_BandGenre UNIQUE (BandID,GenreID)
+);
 
 CREATE TABLE Album(
-	Id SERIAL
-        CONSTRAINT PK_Album PRIMARY KEY,
-	Title VARCHAR(255),
-    BandId INTEGER
-    	CONSTRAINT FK_Album_BandId REFERENCES Band(Id),
-	ArtistId INTEGER
-    	CONSTRAINT FK_Album_ArtistId REFERENCES Artist(Id) 
+	ID SERIAL
+		CONSTRAINT PK_Album PRIMARY KEY,
+	Title VARCHAR(64) NOT NULL,
+	ReleaseDate DATE
 );
 
-CREATE TABLE Album_Track(
-	TrackId INTEGER
-		CONSTRAINT FK_Album_Track_TrackId REFERENCES Track(Id),
-	AlbumId INTEGER
-		CONSTRAINT FK_Album_Track_AlbumId REFERENCES Album(Id)
+CREATE TABLE ArtistAlbum(
+	ArtistID INTEGER
+		CONSTRAINT FK_ArtistAlbum_Artist REFERENCES Artist(ID),
+	AlbumID INTEGER NOT NULL
+		CONSTRAINT FK_ArtistAlbum_Album REFERENCES Album(ID),
+	CONSTRAINT UN_ArtistAlbum UNIQUE(ArtistID,AlbumID)
 );
 
-CREATE TABLE Band_Artist(
-	BandId INTEGER
-		CONSTRAINT FK_Band_Artist_BandId REFERENCES Band(Id),
-	ArtistId INTEGER
-		CONSTRAINT FK_Band_Artist_ArtistId REFERENCES Artist(Id)
+CREATE TABLE BandAlbum(
+	BandID INTEGER NOT NULL
+		CONSTRAINT FK_BandAlbum_Band REFERENCES Band(ID),
+	AlbumID INTEGER NOT NULL
+		CONSTRAINT FK_BandAlbum_Album REFERENCES Album(ID),
+	CONSTRAINT UN_BandAlbum UNIQUE(BandID,AlbumID)
 );
+
+CREATE TABLE Track(
+	ID SERIAL
+		CONSTRAINT PK_Track PRIMARY KEY,
+	Title VARCHAR(64) NOT NULL,
+	Length REAL,
+	AlbumID INTEGER
+		CONSTRAINT FK_Track_Album REFERENCES Album(ID),
+	GenreID INTEGER
+		CONSTRAINT FK_Track_Genre REFERENCES Genre(ID)
+);
+
+CREATE TABLE TrackReview(
+	ID SERIAL
+		CONSTRAINT PK_TrackReview PRIMARY KEY,
+    TrackID INTEGER NOT NULL
+        CONSTRAINT FK_TrackReview_Track REFERENCES Track(ID)
+        ON DELETE CASCADE,
+    FooUserID INTEGER NOT NULL
+        CONSTRAINT FK_TrackReview_FooUser REFERENCES FooUser(ID)
+        ON DELETE CASCADE,
+    Content TEXT NOT NULL
+);
+
+CREATE TABLE ArtistReview(
+	ID SERIAL
+		CONSTRAINT PK_ArtistReview PRIMARY KEY,
+    ArtistID INTEGER NOT NULL
+        CONSTRAINT FK_ArtistReview_Artist REFERENCES Artist(ID)
+        ON DELETE CASCADE,
+    FooUserID INTEGER NOT NULL
+        CONSTRAINT FK_ArtistReview_FooUser REFERENCES FooUser(ID)
+        ON DELETE CASCADE,
+    Content TEXT NOT NULL
+);
+
+CREATE TABLE BandReview(
+	ID SERIAL
+		CONSTRAINT PK_BandReview PRIMARY KEY,
+    BandID INTEGER NOT NULL
+        CONSTRAINT FK_BandReview_Band REFERENCES Band(ID)
+        ON DELETE CASCADE,
+    FooUserID INTEGER NOT NULL
+        CONSTRAINT FK_BandReview_FooUser REFERENCES FooUser(ID)
+        ON DELETE CASCADE,
+    Content TEXT NOT NULL
+);
+
+CREATE TABLE AlbumReview(
+	ID SERIAL
+		CONSTRAINT PK_AlbumReview PRIMARY KEY,
+	AlbumID INTEGER NOT NULL
+		CONSTRAINT FK_AlbumReview_Album REFERENCES Album(ID)
+		ON DELETE CASCADE,
+	FooUserID INTEGER NOT NULL
+		CONSTRAINT FK_AlbumReview_FooUser REFERENCES FooUser(ID)
+		ON DELETE CASCADE,
+	Content TEXT NOT NULL
+);
+
+CREATE TABLE Playlist(
+    ID SERIAL
+        CONSTRAINT PK_Playlist PRIMARY KEY,
+    Title VARCHAR(40),
+    FooUserID INTEGER
+        CONSTRAINT FK_Playlist_FooUser REFERENCES FooUser(ID)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE PlaylistTrack(
+    TrackID INTEGER NOT NULL
+        CONSTRAINT FK_PlaylistTrack_Track REFERENCES Track(ID)
+        ON DELETE CASCADE,
+    PlaylistID INTEGER NOT NULL
+        CONSTRAINT FK_PlaylistTrack_Playlist REFERENCES Playlist(ID)
+        ON DELETE CASCADE,
+	CONSTRAINT UN_PlaylistTrack UNIQUE (TrackID, PlaylistID)
+);
+
+CREATE TABLE AlbumTrack(
+    AlbumID INTEGER NOT NULL
+        CONSTRAINT FK_AlbumTrack_Album REFERENCES Album(ID)
+        ON DELETE CASCADE,
+    TrackID INTEGER NOT NULL
+        CONSTRAINT FK_AlbumTrack_Track REFERENCES Track(ID)
+        ON DELETE CASCADE,
+	CONSTRAINT UN_AlbumTrack UNIQUE (AlbumID, TrackID)
+);
+
+INSERT INTO Artist(StageName, FirstName, LastName, Origin, Birthdate) VALUES
+('Art1','FirstName1','LastName1','Romania','1968-06-24'),
+('Art2','FirstName2','LastName2','Great Britain','1972-09-04'),
+('Art3','FirstName3','LastName3','Italy','1960-12-10'),
+('Art4','FirstName4','LastName4','USA','1982-01-12'),
+('Art5','FirstName5','LastName5','Norway','1956-09-24'),
+('Art6','FirstName6','LastName6','Italy','1990-03-29'),
+('Art7','FirstName7','LastName7','Romania','1973-05-07'),
+('Art8','FirstName8','LastName8','Romania','1980-07-23'),
+('Art9','FirstName9','LastName9','Norway','1939-06-13'),
+('Art10','FirstName10','LastName10','Romania','1993-11-09'),
+('Art12','FirstName11','LastName11','Romania','1954-08-01'),
+('Art11','FirstName12','LastName12','Italy','1973-08-14'),
+('Art13','FirstName13','LastName13','Romania','1979-01-22');
+
+INSERT INTO Band(Name, Origin) VALUES
+('Band1','USA'), 
+('Band2','Romania'), 
+('Band3','Italy'), 
+('Band4','Great Britain');
+
+INSERT INTO Genre(Title) VALUES
+('Genre1'), ('Genre2'), ('Genre3'), ('Genre4'), ('Genre5'), ('Genre6'), ('Genre7');
+
+INSERT INTO Track(Title, Length) VALUES
+('Track1',3.5), ('Track2',4.38), ('Track3',2.28), ('Track4',3.56), ('Track5',5.17), ('Track6',4.33), ('Track7',3.85), ('Track8',4.12), ('Track9',4.37), ('Track10',10.91), ('Track11',7.34), ('Track12',4.5), ('Track13',3.31), ('Track14',2.78), ('Track15',4.21), ('Track16',3.93), ('Track7',3.56), ('Track8',4.56), ('Track9',4.21), ('Track10',3), ('Track11',3.98), ('Track12',4.21), ('Track13',4), ('Track14',6.33), ('Track15',6.89), ('Track16',6), ('Track17',5);
+
+INSERT INTO Album(Title, ReleaseDate) VALUES
+('Album1','1990-01-24'), ('Album2','1990-02-24'), ('Album3','1990-03-24'), ('Album4','1990-04-24'), 
+('Album5','1990-05-24'), ('Album6','1990-06-24'), ('Album7','1990-07-24'), ('Album8','1990-08-24'), 
+('Album9','1990-09-24'), ('Album10','1990-10-24'), ('Album11','1990-11-24'), ('Album12','1990-12-24'), 
+('Album13','1991-01-24');
+
+INSERT INTO ArtistAlbum(ArtistID, AlbumID) VALUES
+(1,1),(1,2),(2,3),(3,4),(1,10),(2,13);
+
+INSERT INTO BandAlbum(BandID, AlbumID) VALUES
+(1,5),(2,6),(3,7),(4,8),(1,9),(1,11),(2,12);
+
+INSERT INTO BandArtist(BandID,ArtistID) VALUES
+(1,1), (1,2), (1,3), (2,4), (2,5), (2,6), (2,7), (2,8), (3,9), (3,10), (4,11), (4,12), (4,13);
+
+INSERT INTO AlbumTrack(TrackID,AlbumID) VALUES
+(1,1),(2,1),(3,2),(4,3),(5,4),(6,5),(7,6),(8,7),(9,8),(10,9),(11,10),(12,10),(13,11),(14,12),(15,12),(16,12),(17,12);
+
+INSERT INTO ArtistGenre VALUES
+(1,1),(2,3),(3,2),(3,1),(4,5),(5,6),(7,7),(8,4),(8,5),(8,7),(9,1),(10,3),(11,2),(12,6),(13,7);
+
+INSERT INTO BandGenre VALUES
+(1,1),(1,2),(2,6),(3,4),(3,7),(3,5),(4,3),(4,2);
+
+INSERT INTO FooUser(UserName, FirstName, LastName, Email, Password) VALUES
+('user1_username', 'user1_firstname', 'user1_lastname', 'user1_email', 'qwerty'),
+('user2_username', 'user2_firstname', 'user2_lastname', 'user2_email', 'asdfgh'),
+('user3_username', 'user3_firstname', 'user3_lastname', 'user3_email', 'zxcvbn'),
+('user4_username', 'user4_firstname', 'user4_lastname', 'user4_email', '123456'),
+('user5_username', 'user5_firstname', 'user5_lastname', 'user5_email', 'uiop90');
+
+INSERT INTO Playlist(Title, FooUserID) VALUES
+('playlist1_title', 1),
+('playlist2_title', 1),
+('playlist3_title', 1),
+('playlist4_title', 2),
+('playlist5_title', 2),
+('playlist6_title', 3),
+('playlist7_title', 4),
+('playlist8_title', 5),
+('playlist9_title', 5);
+
+INSERT INTO PlaylistTrack VALUES
+(1,1),(3,1),(5,1),(6,1),(12,1),
+(10,2),(15,2),(5,2),(17,2),
+(14,3),(13,3),(12,3),(2,3),(4,3),(1,3),
+(1,4),(8,4),(7,4),(6,4),(12,4),(15,4),(16,4),
+(2,5),(3,5),(4,5),(8,5),(9,5),
+(6,6),(13,6),(15,6),(17,6),
+(7,7),(8,7),(1,7),(2,7),(3,7),(4,7),(6,7),(11,7),
+(2,8),(5,8),(4,8),(16,8),(13,8),(11,8),
+(11,9),(12,9),(10,9),(9,9),(7,9);
+
+INSERT INTO AlbumReview(AlbumID,FooUserID,Content) VALUES
+(1,1,
+ 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ Curabitur placerat aliquam quam vel ullamcorper. Donec placerat ligula nulla,
+ quis faucibus nibh consequat sit amet. Sed feugiat rhoncus tortor, non dictum nisl consequat non.'),
+(1,5,
+'Maecenas varius sit amet nisl ac volutpat. Duis tristique arcu ipsum, vitae aliquam felis congue at.
+ Cras velit urna, maximus quis arcu sed, facilisis efficitur eros.
+ Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;'),
+(1,4,
+'Sed at neque mi. Maecenas faucibus nisl at libero mattis,
+ sit amet sagittis nulla eleifend.
+ Praesent quam enim, interdum ac lacus nec,
+ fermentum rutrum nibh. '),
+(1,1,
+'Suspendisse sodales velit eget metus eleifend, quis faucibus quam efficitur.
+ Praesent et nisl a arcu iaculis pulvinar id id erat.
+ Aenean semper ante a pellentesque gravida.'),
+(2,2,
+'Proin sagittis porttitor ante sed semper.
+ Vestibulum consequat est vel tristique aliquam.
+ Mauris semper tristique neque ut vulputate.'),
+(2,3,
+'Quisque fermentum mattis dolor, ac eleifend mauris condimentum in. 
+ Donec pretium auctor gravida. Vestibulum nibh lectus, 
+ elementum in molestie ut, condimentum ac eros.'),
+(3,2,
+'Suspendisse interdum tellus et turpis vulputate finibus. 
+ Aenean sed elementum lectus. 
+ In posuere ante id odio pharetra, et dapibus neque iaculis.'),
+(3,5,
+'Etiam eu sapien augue. Proin ornare, velit a porta euismod, mi risus condimentum arcu,
+ et ullamcorper purus tellus vehicula dui.'),
+(3,5,
+'Sed viverra quis ligula vel pellentesque. Nunc fermentum, ligula quis consectetur luctus, 
+ quam diam rutrum nibh, sit amet pulvinar purus orci a justo. 
+ Proin vitae arcu vel orci bibendum molestie.'),
+(4,3,
+'Suspendisse potenti. Ut fermentum porttitor ex ac elementum. 
+ Mauris tempus erat aliquet ante suscipit, quis maximus diam mattis.'),
+(5,3,
+'Ut dolor mauris, lobortis ut malesuada sed, ultricies vel arcu.'),
+(5,1,
+'Curabitur tellus turpis, laoreet sit amet mauris a, bibendum venenatis urna. 
+ Proin accumsan mattis ante, quis eleifend tortor aliquet at.'),
+(6,5,
+'Aliquam sed enim eget est pellentesque sollicitudin. 
+ Suspendisse ultricies lorem aliquam arcu luctus facilisis. 
+ Donec tristique eget eros et bibendum.'),
+(6,4,
+'Vivamus ex leo, ultricies eget volutpat ac, sagittis ut sapien.'),
+(8,3,
+'Nunc et sodales elit, id cursus nulla. Nulla eu sem a lorem venenatis suscipit nec sit amet tortor.'),
+(8,2,
+'Nulla interdum mauris in consequat fermentum. Donec augue tellus, scelerisque quis vehicula eu, porta eu lorem.'),
+(9,1,
+'Fusce mi ex, imperdiet sed imperdiet efficitur, sagittis in ipsum.'),
+(9,4,
+'Sed efficitur porttitor euismod. Integer viverra purus ac diam iaculis, vel vehicula nisl vestibulum.'),
+(9,5,
+'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
+ Sed rhoncus, tellus faucibus feugiat cursus, est enim porttitor ex, vitae mollis sem lorem vel sem.'),
+(10,2,
+'Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.'),
+(11,1,
+'Maecenas interdum turpis a iaculis ultricies. Curabitur eu volutpat nunc.'),
+(11,4,
+'Morbi euismod dignissim ex, ac lacinia odio mattis at.'),
+(13,5,
+'Maecenas rhoncus varius ullamcorper. Sed ultricies venenatis turpis eu euismod. 
+ Morbi sed nisl ornare, efficitur urna ac, elementum arcu.');
+
+INSERT INTO TrackReview(TrackID,FooUserID,Content) VALUES 
+(17,1,
+'Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ Curabitur placerat aliquam quam vel ullamcorper. Donec placerat ligula nulla,
+ quis faucibus nibh consequat sit amet. Sed feugiat rhoncus tortor, non dictum nisl consequat non.'),
+(8,5,
+'Maecenas varius sit amet nisl ac volutpat. Duis tristique arcu ipsum, vitae aliquam felis congue at.
+ Cras velit urna, maximus quis arcu sed, facilisis efficitur eros.
+ Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;'),
+(8,4,
+'Sed at neque mi. Maecenas faucibus nisl at libero mattis,
+ sit amet sagittis nulla eleifend.
+ Praesent quam enim, interdum ac lacus nec,
+ fermentum rutrum nibh. '),
+(5,1,
+'Suspendisse sodales velit eget metus eleifend, quis faucibus quam efficitur.
+ Praesent et nisl a arcu iaculis pulvinar id id erat.
+ Aenean semper ante a pellentesque gravida.'),
+(2,2,
+'Proin sagittis porttitor ante sed semper.
+ Vestibulum consequat est vel tristique aliquam.
+ Mauris semper tristique neque ut vulputate.'),
+(1,3,
+'Quisque fermentum mattis dolor, ac eleifend mauris condimentum in. 
+ Donec pretium auctor gravida. Vestibulum nibh lectus, 
+ elementum in molestie ut, condimentum ac eros.'),
+(5,2,
+'Suspendisse interdum tellus et turpis vulputate finibus. 
+ Aenean sed elementum lectus. 
+ In posuere ante id odio pharetra, et dapibus neque iaculis.'),
+(3,5,
+'Etiam eu sapien augue. Proin ornare, velit a porta euismod, mi risus condimentum arcu,
+ et ullamcorper purus tellus vehicula dui.'),
+(4,5,
+'Sed viverra quis ligula vel pellentesque. Nunc fermentum, ligula quis consectetur luctus, 
+ quam diam rutrum nibh, sit amet pulvinar purus orci a justo. 
+ Proin vitae arcu vel orci bibendum molestie.'),
+(16,3,
+'Suspendisse potenti. Ut fermentum porttitor ex ac elementum. 
+ Mauris tempus erat aliquet ante suscipit, quis maximus diam mattis.'),
+(15,3,
+'Ut dolor mauris, lobortis ut malesuada sed, ultricies vel arcu.'),
+(10,1,
+'Curabitur tellus turpis, laoreet sit amet mauris a, bibendum venenatis urna. 
+ Proin accumsan mattis ante, quis eleifend tortor aliquet at.'),
+(6,5,
+'Aliquam sed enim eget est pellentesque sollicitudin. 
+ Suspendisse ultricies lorem aliquam arcu luctus facilisis. 
+ Donec tristique eget eros et bibendum.'),
+(7,4,
+'Vivamus ex leo, ultricies eget volutpat ac, sagittis ut sapien.'),
+(1,3,
+'Nunc et sodales elit, id cursus nulla. Nulla eu sem a lorem venenatis suscipit nec sit amet tortor.'),
+(11,2,
+'Nulla interdum mauris in consequat fermentum. Donec augue tellus, scelerisque quis vehicula eu, porta eu lorem.'),
+(14,1,
+'Fusce mi ex, imperdiet sed imperdiet efficitur, sagittis in ipsum.'),
+(4,4,
+'Sed efficitur porttitor euismod. Integer viverra purus ac diam iaculis, vel vehicula nisl vestibulum.'),
+(15,5,
+'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
+ Sed rhoncus, tellus faucibus feugiat cursus, est enim porttitor ex, vitae mollis sem lorem vel sem.'),
+(12,2,
+'Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.'),
+(3,1,
+'Maecenas interdum turpis a iaculis ultricies. Curabitur eu volutpat nunc.'),
+(11,4,
+'Morbi euismod dignissim ex, ac lacinia odio mattis at.'),
+(16,5,
+'Maecenas rhoncus varius ullamcorper. Sed ultricies venenatis turpis eu euismod. 
+ Morbi sed nisl ornare, efficitur urna ac, elementum arcu.');
+
+INSERT INTO BandReview(BandID,FooUserID,Content) VALUES
+(1,1,
+'Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ Curabitur placerat aliquam quam vel ullamcorper. Donec placerat ligula nulla,
+ quis faucibus nibh consequat sit amet. Sed feugiat rhoncus tortor, non dictum nisl consequat non.'),
+(1,2,
+'Maecenas varius sit amet nisl ac volutpat. Duis tristique arcu ipsum, vitae aliquam felis congue at.
+ Cras velit urna, maximus quis arcu sed, facilisis efficitur eros.
+ Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;'),
+(1,3,
+'Sed at neque mi. Maecenas faucibus nisl at libero mattis,
+ sit amet sagittis nulla eleifend.
+ Praesent quam enim, interdum ac lacus nec,
+ fermentum rutrum nibh. '),
+(1,4,
+'Suspendisse sodales velit eget metus eleifend, quis faucibus quam efficitur.
+ Praesent et nisl a arcu iaculis pulvinar id id erat.
+ Aenean semper ante a pellentesque gravida.'),
+(1,5,
+'Proin sagittis porttitor ante sed semper.
+ Vestibulum consequat est vel tristique aliquam.
+ Mauris semper tristique neque ut vulputate.'),
+(2,1,
+'Quisque fermentum mattis dolor, ac eleifend mauris condimentum in. 
+ Donec pretium auctor gravida. Vestibulum nibh lectus, 
+ elementum in molestie ut, condimentum ac eros.'),
+(2,2,
+'Suspendisse interdum tellus et turpis vulputate finibus. 
+ Aenean sed elementum lectus. 
+ In posuere ante id odio pharetra, et dapibus neque iaculis.'),
+(2,3,
+'Etiam eu sapien augue. Proin ornare, velit a porta euismod, mi risus condimentum arcu,
+ et ullamcorper purus tellus vehicula dui.'),
+(2,4,
+'Sed viverra quis ligula vel pellentesque. Nunc fermentum, ligula quis consectetur luctus, 
+ quam diam rutrum nibh, sit amet pulvinar purus orci a justo. 
+ Proin vitae arcu vel orci bibendum molestie.'),
+(2,5,
+'Suspendisse potenti. Ut fermentum porttitor ex ac elementum. 
+ Mauris tempus erat aliquet ante suscipit, quis maximus diam mattis.'),
+(3,1,
+'Ut dolor mauris, lobortis ut malesuada sed, ultricies vel arcu.'),
+(3,2,
+'Curabitur tellus turpis, laoreet sit amet mauris a, bibendum venenatis urna. 
+ Proin accumsan mattis ante, quis eleifend tortor aliquet at.'),
+(3,3,
+'Aliquam sed enim eget est pellentesque sollicitudin. 
+ Suspendisse ultricies lorem aliquam arcu luctus facilisis. 
+ Donec tristique eget eros et bibendum.'),
+(3,4,
+'Vivamus ex leo, ultricies eget volutpat ac, sagittis ut sapien.'),
+(1,3,
+'Nunc et sodales elit, id cursus nulla. Nulla eu sem a lorem venenatis suscipit nec sit amet tortor.'),
+(3,5,
+'Nulla interdum mauris in consequat fermentum. Donec augue tellus, scelerisque quis vehicula eu, porta eu lorem.'),
+(4,1,
+'Fusce mi ex, imperdiet sed imperdiet efficitur, sagittis in ipsum.'),
+(4,2,
+'Sed efficitur porttitor euismod. Integer viverra purus ac diam iaculis, vel vehicula nisl vestibulum.'),
+(4,3,
+'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
+ Sed rhoncus, tellus faucibus feugiat cursus, est enim porttitor ex, vitae mollis sem lorem vel sem.'),
+(4,4,
+'Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.'),
+(4,1,
+'Maecenas interdum turpis a iaculis ultricies. Curabitur eu volutpat nunc.'),
+(4,4,
+'Morbi euismod dignissim ex, ac lacinia odio mattis at.'),
+(4,5,
+'Maecenas rhoncus varius ullamcorper. Sed ultricies venenatis turpis eu euismod. 
+ Morbi sed nisl ornare, efficitur urna ac, elementum arcu.');
+
+INSERT INTO ArtistReview(ArtistID,FooUserID,Content) VALUES
+(1,1,
+'Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ Curabitur placerat aliquam quam vel ullamcorper. Donec placerat ligula nulla,
+ quis faucibus nibh consequat sit amet. Sed feugiat rhoncus tortor, non dictum nisl consequat non.'),
+(1,5,
+'Maecenas varius sit amet nisl ac volutpat. Duis tristique arcu ipsum, vitae aliquam felis congue at.
+ Cras velit urna, maximus quis arcu sed, facilisis efficitur eros.
+ Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;'),
+(1,4,
+'Sed at neque mi. Maecenas faucibus nisl at libero mattis,
+ sit amet sagittis nulla eleifend.
+ Praesent quam enim, interdum ac lacus nec,
+ fermentum rutrum nibh. '),
+(2,1,
+'Suspendisse sodales velit eget metus eleifend, quis faucibus quam efficitur.
+ Praesent et nisl a arcu iaculis pulvinar id id erat.
+ Aenean semper ante a pellentesque gravida.'),
+(2,2,
+'Proin sagittis porttitor ante sed semper.
+ Vestibulum consequat est vel tristique aliquam.
+ Mauris semper tristique neque ut vulputate.'),
+(2,3,
+'Quisque fermentum mattis dolor, ac eleifend mauris condimentum in. 
+ Donec pretium auctor gravida. Vestibulum nibh lectus, 
+ elementum in molestie ut, condimentum ac eros.'),
+(3,2,
+'Suspendisse interdum tellus et turpis vulputate finibus. 
+ Aenean sed elementum lectus. 
+ In posuere ante id odio pharetra, et dapibus neque iaculis.'),
+(3,5,
+'Etiam eu sapien augue. Proin ornare, velit a porta euismod, mi risus condimentum arcu,
+ et ullamcorper purus tellus vehicula dui.'),
+(3,5,
+'Sed viverra quis ligula vel pellentesque. Nunc fermentum, ligula quis consectetur luctus, 
+ quam diam rutrum nibh, sit amet pulvinar purus orci a justo. 
+ Proin vitae arcu vel orci bibendum molestie.'),
+(4,3,
+'Suspendisse potenti. Ut fermentum porttitor ex ac elementum. 
+ Mauris tempus erat aliquet ante suscipit, quis maximus diam mattis.'),
+(5,3,
+'Ut dolor mauris, lobortis ut malesuada sed, ultricies vel arcu.'),
+(5,1,
+'Curabitur tellus turpis, laoreet sit amet mauris a, bibendum venenatis urna. 
+ Proin accumsan mattis ante, quis eleifend tortor aliquet at.'),
+(6,5,
+'Aliquam sed enim eget est pellentesque sollicitudin. 
+ Suspendisse ultricies lorem aliquam arcu luctus facilisis. 
+ Donec tristique eget eros et bibendum.'),
+(6,4,
+'Vivamus ex leo, ultricies eget volutpat ac, sagittis ut sapien.'),
+(8,3,
+'Nunc et sodales elit, id cursus nulla. Nulla eu sem a lorem venenatis suscipit nec sit amet tortor.'),
+(8,2,
+'Nulla interdum mauris in consequat fermentum. Donec augue tellus, scelerisque quis vehicula eu, porta eu lorem.'),
+(9,1,
+'Fusce mi ex, imperdiet sed imperdiet efficitur, sagittis in ipsum.'),
+(9,4,
+'Sed efficitur porttitor euismod. Integer viverra purus ac diam iaculis, vel vehicula nisl vestibulum.'),
+(9,5,
+'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
+ Sed rhoncus, tellus faucibus feugiat cursus, est enim porttitor ex, vitae mollis sem lorem vel sem.'),
+(10,2,
+'Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.'),
+(11,1,
+'Maecenas interdum turpis a iaculis ultricies. Curabitur eu volutpat nunc.'),
+(11,4,
+'Morbi euismod dignissim ex, ac lacinia odio mattis at.'),
+(13,5,
+'Maecenas rhoncus varius ullamcorper. Sed ultricies venenatis turpis eu euismod. 
+ Morbi sed nisl ornare, efficitur urna ac, elementum arcu.');

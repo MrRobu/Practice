@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Foo.ViewModels
 {
-    public class SettingsViewModel : Screen
+    public class BandCreateViewModel : Screen
     {
     }
 }
