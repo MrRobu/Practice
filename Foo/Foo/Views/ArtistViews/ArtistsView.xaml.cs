@@ -39,5 +39,10 @@ namespace Foo.Views
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text) || e.Text.Length == 0;
         }
+
+        private void FilterArtist_Birthdate_KeyDown(object sender, KeyEventArgs e)
+        {
+            ((DatePicker)sender).Text = null; 
+        }
     }
 }

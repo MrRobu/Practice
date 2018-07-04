@@ -42,7 +42,7 @@ namespace Foo.ViewModels
 
         public void LoadTracksView()
         {
-            ActivateItem(new BandsViewModel());
+            ActivateItem(new TracksViewModel());
         }
 
         public void LoadPlaylistsView()
@@ -52,7 +52,7 @@ namespace Foo.ViewModels
 
         public void LoadGenresView()
         {
-            ActivateItem(new PlaylistsViewModel());
+            ActivateItem(new GenresViewModel());
         }
 
         public void LoadFooUsersView()

@@ -210,14 +210,17 @@ INSERT INTO Band(Name, Origin) VALUES
 INSERT INTO Genre(Title) VALUES
 ('Genre1'), ('Genre2'), ('Genre3'), ('Genre4'), ('Genre5'), ('Genre6'), ('Genre7');
 
-INSERT INTO Track(Title, Length) VALUES
-('Track1',3.5), ('Track2',4.38), ('Track3',2.28), ('Track4',3.56), ('Track5',5.17), ('Track6',4.33), ('Track7',3.85), ('Track8',4.12), ('Track9',4.37), ('Track10',10.91), ('Track11',7.34), ('Track12',4.5), ('Track13',3.31), ('Track14',2.78), ('Track15',4.21), ('Track16',3.93), ('Track7',3.56), ('Track8',4.56), ('Track9',4.21), ('Track10',3), ('Track11',3.98), ('Track12',4.21), ('Track13',4), ('Track14',6.33), ('Track15',6.89), ('Track16',6), ('Track17',5);
-
 INSERT INTO Album(Title, ReleaseDate) VALUES
 ('Album1','1990-01-24'), ('Album2','1990-02-24'), ('Album3','1990-03-24'), ('Album4','1990-04-24'), 
 ('Album5','1990-05-24'), ('Album6','1990-06-24'), ('Album7','1990-07-24'), ('Album8','1990-08-24'), 
 ('Album9','1990-09-24'), ('Album10','1990-10-24'), ('Album11','1990-11-24'), ('Album12','1990-12-24'), 
 ('Album13','1991-01-24');
+
+INSERT INTO Track(Title, Length, AlbumID, GenreID) VALUES
+('Track1',3.5,1,1), ('Track2',4.38,1,1), ('Track3',2.28,2,3), ('Track4',3.56,2,3), ('Track5',5.17,2,3), ('Track6',4.33,3,6), ('Track7',3.85,4,5), 
+('Track8',4.12,4,5), ('Track9',4.37,4,5), ('Track10',10.91,1,2), ('Track11',7.34,1,1), ('Track12',4.5,1,1), ('Track13',3.31,2,3), ('Track14',2.78,5,5), 
+('Track15',4.21,5,5), ('Track16',3.93,7,1), ('Track7',3.56,9,3), ('Track8',4.56,10,5), ('Track9',4.21,11,4), ('Track10',3,12,5), ('Track11',3.98,13,2), 
+('Track12',4.21,3,3), ('Track13',4,4,4), ('Track14',6.33,5,5), ('Track15',6.89,6,6), ('Track16',6,null,null), ('Track17',5,null,null);
 
 INSERT INTO ArtistAlbum(ArtistID, AlbumID) VALUES
 (1,1),(1,2),(2,3),(3,4),(1,10),(2,13);

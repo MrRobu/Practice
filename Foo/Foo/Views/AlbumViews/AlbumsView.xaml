@@ -64,17 +64,11 @@
                 <Label Grid.Row="0" Grid.Column="0" Content="ID"/>
                 <TextBox Grid.Row="0" Grid.Column="1" DataContext="{Binding Path=FilterAlbum}" Text="{Binding Path=ID,TargetNullValue=''}"  Foreground="Black" PreviewTextInput="FilterAlbum_ID_PreviewTextInput"/>
 
-                <Label Grid.Row="1" Grid.Column="0" Content="Name"/>
+                <Label Grid.Row="1" Grid.Column="0" Content="Title"/>
                 <TextBox Grid.Row="1" Grid.Column="1" x:Name="FilterAlbum_Title" Foreground="Black"/>
 
-                <!--<Label Grid.Row="2" Grid.Column="0" Content="Band"/>
-                <ComboBox Grid.Row="2" Grid.Column="1" x:Name="FilterAlbum_Band_Name" Foreground="Black"/>
-
-                <Label Grid.Row="3" Grid.Column="0" Content="Artist"/>
-                <ComboBox Grid.Row="3" Grid.Column="1" x:Name="FilterAlbum_Artist_Name" Foreground="Black"/>-->
-
-                <Label Grid.Row="4" Grid.Column="0" Content="ReleaseDate"/>
-                <DatePicker Grid.Row="4" Grid.Column="1" x:Name="FilterAlbum_ReleaseDate" Foreground="Black"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="ReleaseDate"/>
+                <DatePicker Grid.Row="2" Grid.Column="1" x:Name="FilterAlbum_ReleaseDate" Foreground="Black" Focusable="False" Keyboard.KeyDown="FilterAlbum_ReleaseDate_KeyDown"/>
 
                 <Button x:Name="Filter" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Content="Filter" Background="LightGray" BorderBrush="LightGray" Margin="10" HorizontalAlignment="Stretch"/>
             </Grid>
@@ -85,6 +79,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding Path=ID}"/>
                         <DataGridTextColumn Header="Title" Binding="{Binding Path=Title}"/>
+                        <DataGridTextColumn Header="Title" Binding="{Binding Path=ReleaseDate, StringFormat={}{0:d MMMM yyyy}}"/>
                         <DataGridTextColumn Header="Owner" Binding="{Binding Path=Owner}"/>
                     </DataGrid.Columns>
                 </DataGrid>

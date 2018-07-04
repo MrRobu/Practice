@@ -16,7 +16,7 @@ namespace Foo.ViewModels
         }
 
         #region FooUser
-        public FooUser FooUser { get; }
+        public FooUser FooUser { get; set; }
 
         public void DeleteFooUser()
         {

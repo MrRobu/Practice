@@ -45,7 +45,7 @@ namespace Foo.ViewModels
                         Albums = new List<Album> { Album.Find((int)FilterAlbum.ID) };
                     }
 
-                    string sql = "SELECT * FROM Artist";
+                    string sql = "SELECT * FROM Album";
 
                     List<string> filters = new List<string>();
 

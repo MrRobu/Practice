@@ -39,5 +39,17 @@ namespace Foo.Views
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text) || e.Text.Length == 0;
         }
+
+        private void Albums_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Back)
+                Albums.SelectedItem = null;
+        }
+
+        private void Genres_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Back)
+                Genres.SelectedItem = null;
+        }
     }
 }

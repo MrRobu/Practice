@@ -94,6 +94,7 @@
     <Compile Include="Models\Genre.cs" />
     <Compile Include="Models\Playlist.cs" />
     <Compile Include="Models\Track.cs" />
+    <Compile Include="Models\TrackReview.cs" />
     <Compile Include="ViewModels\AlbumViewModels\AlbumCreateViewModel.cs" />
     <Compile Include="ViewModels\AlbumViewModels\AlbumsViewModel.cs" />
     <Compile Include="ViewModels\AlbumViewModels\AlbumEditViewModel.cs" />

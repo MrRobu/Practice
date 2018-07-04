@@ -39,5 +39,13 @@ namespace Foo.Views
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text) || e.Text.Length == 0;
         }
+
+        private void FooUsers_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Back)
+            {
+                FooUsers.SelectedItem = null;
+            }
+        }
     }
 }

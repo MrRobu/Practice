@@ -31,13 +31,15 @@ namespace Foo.Models
             {
                 if (_tracks != null) return _tracks;
 
+                if (ID == null) return null;
+
                 try
                 {
                     using (var connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
                     {
                         if (ID == null) return null;
 
-                        string sql = $"SELECT T.* FROM Track T INNER JOIN AlbumTrack AT ON AT.TrackID = T.ID INNER JOIN Album Al ON Al.ID = AT.AlbumID WHERE Al.ID = {ID};";
+                        string sql = $"SELECT T.* FROM Track T INNER JOIN AlbumTrack AT ON AT.TrackID = T.ID INNER JOIN Album Al ON Al.ID = AT.AlbumID WHERE Al.ID = {ID}";
 
                         return _tracks = new ObservableCollection<Track>(connection.Query<Track>(sql));
                     }
@@ -61,19 +63,22 @@ namespace Foo.Models
             {
                 if (_artist != null) return _artist;
 
-                try
-                {
-                    using (var connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
-                    {
-                        string sql = $"SELECT A.* FROM Artist A INNER JOIN ArtistAlbum AA ON AA.ArtistID = A.ID INNER JOIN Album Al ON Al.ID = AA.AlbumID WHERE Al.ID = {ID} LIMIT 1";
+                if (ID == null) return null;
 
-                        return _artist = connection.Query<Artist>(sql).FirstOrDefault();
+                if(_band == null)
+                    try
+                    {
+                        using (var connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
+                        {
+                            string sql = $"SELECT A.* FROM Artist A INNER JOIN ArtistAlbum AA ON AA.ArtistID = A.ID INNER JOIN Album Al ON Al.ID = AA.AlbumID WHERE Al.ID = {ID} LIMIT 1";
+
+                            return _artist = connection.Query<Artist>(sql).FirstOrDefault();
+                        }
                     }
-                }
-                catch (OdbcException error)
-                {
-                    MessageBox.Show($"Class: Album\n Property: Artist\n Error: {error.Message}");
-                }
+                    catch (OdbcException error)
+                    {
+                        MessageBox.Show($"Class: Album\n Property: Artist\n Error: {error.Message}");
+                    }
 
                 return null;
             }
@@ -86,19 +91,20 @@ namespace Foo.Models
             {
                 if (_band != null) return _band;
 
-                try
-                {
-                    using (var connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
+                if( _artist == null)
+                    try
                     {
-                        string sql = $"SELECT B.* FROM Band B INNER JOIN BandAlbum BA ON BA.BandID = B.ID INNER JOIN Album Al ON Al.ID = BA.AlbumID WHERE Al.ID = {ID} LIMIT 1";
+                        using (var connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
+                        {
+                            string sql = $"SELECT B.* FROM Band B INNER JOIN BandAlbum BA ON BA.BandID = B.ID INNER JOIN Album Al ON Al.ID = BA.AlbumID WHERE Al.ID = {ID} LIMIT 1";
 
-                        return _band = connection.Query<Band>(sql).FirstOrDefault();
+                            return _band = connection.Query<Band>(sql).FirstOrDefault();
+                        }
                     }
-                }
-                catch (OdbcException error)
-                {
-                    MessageBox.Show($"Class: Album\n Property: Band\n Error: {error.Message}");
-                }
+                    catch (OdbcException error)
+                    {
+                        MessageBox.Show($"Class: Album\n Property: Band\n Error: {error.Message}");
+                    }
 
                 return null;
             }
@@ -172,7 +178,7 @@ namespace Foo.Models
         {
             try
             {
-                using (OdbcConnection connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
+                using (var connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
                 {
                     var albums = connection.Query<Album>("SELECT * FROM Album").ToList();
                     return albums;
@@ -190,7 +196,7 @@ namespace Foo.Models
         {
             try
             {
-                using (OdbcConnection connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
+                using (var connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
                 {
                     var album = connection.Query<Album>($"SELECT * FROM Album WHERE ID = {id}").First();
                     return album;
@@ -226,7 +232,7 @@ namespace Foo.Models
         {
             try
             {
-                using (OdbcConnection connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
+                using (var connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
                 {
                     if (ID == 0)
                     {
@@ -234,10 +240,17 @@ namespace Foo.Models
                     }
                     else
                     {
-                        connection.Execute($"UPDATE Album SET Title = '{Title}', ReleaseDate = '{ReleaseDate?.ToShortDateString()}';");
+                        connection.Execute($"UPDATE Album SET Title = '{Title}', ReleaseDate = '{ReleaseDate?.ToShortDateString()}' WHERE ID = {ID};");
                     }
 
-                    connection.Execute($"");
+                    // Save artist or band
+                    string sql = $"DELETE FROM ArtistAlbum WHERE AlbumID = {ID}; DELETE FROM BandAlbum WHERE AlbumID = {ID};";
+
+                    if (Artist != null)
+                        connection.Execute(sql + $"INSERT INTO ArtistAlbum VALUES({Artist.ID}, {ID})");
+
+                    if (Band != null)
+                        connection.Execute(sql + $"INSERT INTO BandAlbum VALUES({Band.ID}, {ID})");
                 }
             }
             catch (OdbcException error)

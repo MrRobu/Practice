@@ -27,7 +27,7 @@ namespace Foo.Views
 
         private void BandComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(BandComboBox.SelectedItem != null)
+            if (BandComboBox.SelectedItem != null)
                 ArtistComboBox.SelectedItem = null;
         }
 

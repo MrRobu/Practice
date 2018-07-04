@@ -18,7 +18,6 @@ namespace Foo.ViewModels
         public PlaylistsViewModel()
         {
             Playlists = Playlist.All();
-            FilterPlaylist = new Playlist();
         }
 
         public void LoadPlaylistCreateView()
@@ -29,23 +28,23 @@ namespace Foo.ViewModels
         public void LoadPlaylistEditView()
         {
             if (SelectedPlaylist != null)
-                ShellViewModel.Instance.ActivateItem(new BandEditViewModel((int)SelectedPlaylist.ID));
+                ShellViewModel.Instance.ActivateItem(new PlaylistEditViewModel((int)SelectedPlaylist.ID));
         }
 
-        public Playlist FilterPlaylist { get; set; }
+        public Playlist FilterPlaylist { get; set; } = new Playlist();
 
         public void Filter()
         {
             try
             {
-                using (OdbcConnection connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
+                using (var connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
                 {
                     if (FilterPlaylist.ID != null)
                     {
                         Playlists = new List<Playlist> { Playlist.Find((int)FilterPlaylist.ID) };
                     }
 
-                    string sql = "SELECT * FROM Artist";
+                    string sql = "SELECT * FROM Playlist";
 
                     List<string> filters = new List<string>();
 
@@ -63,11 +62,11 @@ namespace Foo.ViewModels
                         parameters.Add("Title", "%" + FilterPlaylist.Title + "%");
                     }
 
-                    //if (FilterPlaylist.FooUser.UserName != "")
-                    //{
-                    //    filters.Add("Origin ILIKE ?");
-                    //    parameters.Add("Origin", "%" + FilterBand.Origin + "%");
-                    //}
+                    if (FilterPlaylist.FooUser != null)
+                    {
+                        filters.Add("FooUserID = ?");
+                        parameters.Add("FooUserID", FilterPlaylist.FooUser.ID);
+                    }
 
                     if (filters.Count > 0)
                         sql += " WHERE " + string.Join(" AND ", filters);
@@ -95,5 +94,7 @@ namespace Foo.ViewModels
         }
 
         public Playlist SelectedPlaylist { get; set; }
+
+        public List<FooUser> FooUsers { get; } = FooUser.All();
     }
 }

@@ -11,7 +11,7 @@ namespace Foo.Models
 {
     public class FooUser
     {
-        public int? ID { get; }
+        public int? ID { get; set; }
 
         public string UserName { get; set; }
 
@@ -23,6 +23,29 @@ namespace Foo.Models
         
         // TODO: Password encryption
         public string Password { get; set; }
+
+        private List<Playlist> _playlists;
+
+        public List<Playlist> Playlists
+        {
+            get
+            {
+                try
+                {
+                    using (OdbcConnection connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
+                    {
+                        return _playlists = connection.Query<Playlist>($"SELECT * FROM Playlist WHERE FooUserID = {ID}").ToList();
+                    }
+                }
+                catch (OdbcException error)
+                {
+                    MessageBox.Show(error.Message);
+                }
+
+                return null;
+            }
+            set => _playlists = value;
+        }
 
         public static List<FooUser> All()
         {
@@ -84,14 +107,26 @@ namespace Foo.Models
             {
                 using (OdbcConnection connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
                 {
+                    string sql;
+                    object obj = new
+                    {
+                        @UserName = UserName,
+                        @FirstName = FirstName,
+                        @LastName = LastName,
+                        @Email = Email,
+                        @Password = Password
+                    };
+
                     if (ID == 0)
                     {
-                        connection.Execute($"INSERT INTO FooUser VALUES ('{UserName}', '{FirstName}', '{LastName}', '{Email}', '{Password}')");
+                        sql = $"INSERT INTO FooUser VALUES ( ?, ?, ?, ?, ? )";
                     }
                     else
                     {
-                        connection.Execute($"UPDATE FooUser SET UserName = '{UserName}', FirstName = '{FirstName}', LastName = '{LastName}', Email = '{Email}', Password = '{Password}' WHERE ID = {ID}");
+                         sql = $"UPDATE FooUser SET UserName = ?, FirstName = ?, LastName = ?, Email = ?, Password = ? WHERE ID = {ID}";
                     }
+
+                    connection.Execute(sql, obj);
                 }
             }
             catch (OdbcException error)

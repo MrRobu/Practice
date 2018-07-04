@@ -11,7 +11,7 @@ namespace Foo.Models
 {
     public class Genre
     {   
-        public int? ID { get; }
+        public int? ID { get; set; }
 
         public string Title { get; set; }
 
@@ -45,7 +45,7 @@ namespace Foo.Models
                     }
                     else
                     {
-                        connection.Execute($"UPDATE Genre SET Title = '{Title}';");
+                        connection.Execute($"UPDATE Genre SET Title = '{Title}' WHERE ID = {ID};");
                     }
                 }
             }

@@ -57,13 +57,12 @@ namespace Foo.Models
             {
                 if (_artists != null) return _artists;
 
+                if (ID == null) return null;
+
                 try
                 {
                     using (var connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
                     {
-                        if (ID == null)
-                            return null;
-
                         string sql = $"SELECT * FROM Band B INNER JOIN BandArtist BA ON BA.BandID = B.ID INNER JOIN Artist A ON A.ID = BA.ArtistID WHERE B.ID = {ID};";
 
                         return _artists = new ObservableCollection<Artist>(connection.Query<Artist>(sql));
@@ -85,12 +84,13 @@ namespace Foo.Models
             {
                 if (_genres != null) return _genres;
 
+                if (ID == null) return null;
+
                 try
                 {
-                    using (OdbcConnection connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
+                    using (var connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
                     {
-                        if (ID == null)
-                            return null;
+                        
 
                         string sql = $"SELECT G.ID, G.Title FROM Band B INNER JOIN BandGenre BG ON BG.BandID = B.ID INNER JOIN Genre G ON G.ID = BG.GenreID WHERE B.ID = {ID};";
 
@@ -104,7 +104,7 @@ namespace Foo.Models
 
                 return null;
             }
-            set => _genres = null;
+            set => _genres = value;
         }
 
         public List<BandReview> Reviews
@@ -113,7 +113,7 @@ namespace Foo.Models
             {
                 try
                 {
-                    using (OdbcConnection connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
+                    using (var connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
                     {
                         if (ID == null) return null;
 
@@ -135,7 +135,7 @@ namespace Foo.Models
         {
             try
             {
-                using (OdbcConnection connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
+                using (var connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
                 {
                     connection.Execute($"DELETE FROM Band WHERE ID = {ID};");
                 }
@@ -153,18 +153,56 @@ namespace Foo.Models
         {
             try
             {
-                using (OdbcConnection connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
+                using (var connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
                 {
+                    string sql;
+
+                    object obj = new
+                    {
+                        @Name = Name,
+                        @Origin = Origin
+                    };
+                        
                     if (ID == 0)
                     {
-                        connection.Execute($"INSERT INTO Band VALUES ('{Name}', '{Origin}');");
+                        sql = $"INSERT INTO Band(Name, Origin) VALUES ( ?, ? );";
                     }
                     else
                     {
-                        connection.Execute($"UPDATE Band SET Name = '{Name}', Country = '{Origin}';");
+                        sql = $"UPDATE Band SET Name = ?, Origin = ? WHERE ID = {ID};";
                     }
 
+                    connection.Execute(sql,obj);
 
+                    // Artists
+                    if(Artists != null)
+                    {
+                        List<String> values = new List<String>();
+
+                        foreach (var artist in Artists)
+                        {
+                            values.Add($"({ID}, {artist.ID})");
+                        }
+
+                        sql = $"DELETE FROM BandArtist WHERE BandID = {ID}; INSERT INTO BandArtist VALUES {string.Join(",", values)};";
+
+                        connection.Execute(sql);
+                    }
+
+                    // Genres
+                    if (Genres != null)
+                    {
+                        List<String> values = new List<String>();
+
+                        foreach (var genre in Genres)
+                        {
+                            values.Add($"({ID}, {genre.ID})");
+                        }
+
+                        sql = $"DELETE FROM BandGenre WHERE BandID = {ID}; INSERT INTO BandGenre VALUES {string.Join(",", values)};";
+
+                        connection.Execute(sql);
+                    }
                 }
             }
             catch (OdbcException error)
@@ -180,7 +218,7 @@ namespace Foo.Models
         {
             try
             {
-                using (OdbcConnection connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
+                using (var connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
                 {
                     var bands = connection.Query<Band>("SELECT * FROM Band").ToList();
                     return bands;
@@ -198,7 +236,7 @@ namespace Foo.Models
         {
             try
             {
-                using (OdbcConnection connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
+                using (var connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
                 {
                     var band = connection.Query<Band>($"SELECT * FROM Band WHERE ID = {id}").First();
                     return band;

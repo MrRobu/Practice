@@ -67,26 +67,36 @@
                 <Label Grid.Row="1" Grid.Column="0" Content="Title"/>
                 <TextBox Grid.Row="1" Grid.Column="1" x:Name="FilterTrack_Title" Foreground="Black"/>
 
-                <Label Grid.Row="2" Grid.Column="0" Content="Length"/>
-                <TextBox Grid.Row="2" Grid.Column="1" x:Name="FilterTrack_Length" Foreground="Black"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="Genre"/>
+                <ComboBox Grid.Row="2" Grid.Column="1" x:Name="Genres" SelectedItem="{Binding Path=FilterTrack.Genre}" Background="WhiteSmoke" Foreground="Black" Keyboard.KeyDown="Genres_KeyDown">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Title}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
 
-                <Label Grid.Row="3" Grid.Column="0" Content="Genre"/>
-                <ComboBox Grid.Row="3" Grid.Column="1" x:Name="FilterTrack_Genre_Title" Foreground="Black"/>
-
-                <Label Grid.Row="4" Grid.Column="0" Content="Album"/>
-                <ComboBox Grid.Row="4" Grid.Column="1" x:Name="FilterTrack_Album_Title" Foreground="Black"/>
+                <Label Grid.Row="3" Grid.Column="0" Content="Album"/>
+                <ComboBox Grid.Row="3" Grid.Column="1" x:Name="Albums" SelectedItem="{Binding Path=FilterTrack.Album}" Background="WhiteSmoke" Foreground="Black" Keyboard.KeyDown="Albums_KeyDown">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Title}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
 
                 <Button x:Name="Filter" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Content="Filter" Background="LightGray" BorderBrush="LightGray" Margin="10" HorizontalAlignment="Stretch"/>
             </Grid>
 
             <Grid Grid.Row="0" Grid.Column="2" Margin="20">
-                <DataGrid Name="TrackDataGrid" Background="White" ItemsSource="{Binding Path=Tracks}" AutoGenerateColumns="False" SelectedItem="{Binding Path=SelectedTrack}" 
-                          ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True" SelectionUnit="FullRow" SelectionMode="Single" Height="auto" SelectionChanged="TrackDataGrid_SelectionChanged">
+                <DataGrid Name="TrackDataGrid" Background="White" ItemsSource="{Binding Tracks}" AutoGenerateColumns="False" SelectedItem="{Binding Path=SelectedTrack}" 
+                          ScrollViewer.VerticalScrollBarVisibility="Visible" IsReadOnly="True" SelectionUnit="FullRow" SelectionMode="Single" MaxHeight="350" SelectionChanged="TrackDataGrid_SelectionChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding Path=ID}"/>
                         <DataGridTextColumn Header="Title" Binding="{Binding Path=Title}"/>
-                        <DataGridTextColumn Header="Genre" Binding="{Binding Path=Genre.Title}"/>
+                        <DataGridTextColumn Header="Length" Binding="{Binding Path=Length}"/>
                         <DataGridTextColumn Header="Album" Binding="{Binding Path=Album.Title}"/>
+                        <DataGridTextColumn Header="Genre" Binding="{Binding Path=Genre.Title}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

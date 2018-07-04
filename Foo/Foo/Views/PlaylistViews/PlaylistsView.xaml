@@ -68,7 +68,13 @@
                 <TextBox Grid.Row="1" Grid.Column="1" x:Name="FilterPlaylist_Title" Foreground="Black"/>
 
                 <Label Grid.Row="2" Grid.Column="0" Content="Foo User"/>
-                <ComboBox Grid.Row="2" Grid.Column="1" x:Name="FilterPlaylist_FooUser" Foreground="Black"/>
+                <ComboBox Grid.Row="2" Grid.Column="1" x:Name="FooUsers" SelectedItem="{Binding Path=FilterPlaylist.FooUser}" Foreground="Black" Background="WhiteSmoke" Keyboard.KeyDown="FooUsers_KeyDown">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=UserName}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
 
                 <Button x:Name="Filter" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Content="Filter" Background="LightGray" BorderBrush="LightGray" Margin="10" HorizontalAlignment="Stretch"/>
             </Grid>

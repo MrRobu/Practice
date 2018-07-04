@@ -14,7 +14,7 @@ namespace Foo.Models
     public class Artist
     {
         private ObservableCollection<Album> _albums;
-        private ObservableCollection<Playlist> _bands;
+        private ObservableCollection<Band> _bands;
         private ObservableCollection<Genre> _genres;
 
         public int? ID { get; set; }
@@ -91,7 +91,7 @@ namespace Foo.Models
             }
         }
 
-        public ObservableCollection<Playlist> Bands
+        public ObservableCollection<Band> Bands
         {
             get
             {
@@ -104,7 +104,7 @@ namespace Foo.Models
                         if (ID == null)
                             return null;
                         string sql = $"SELECT B.ID, B.Name FROM Artist A INNER JOIN BandArtist BA ON BA.ArtistID = A.ID INNER JOIN Band B ON B.ID = BA.BandID WHERE A.ID = {ID};";
-                        return _bands = new ObservableCollection<Playlist>(connection.Query<Playlist>(sql));
+                        return _bands = new ObservableCollection<Band>(connection.Query<Band>(sql));
                     }
                 }
                 catch (OdbcException error)
@@ -173,16 +173,30 @@ namespace Foo.Models
             {
                 using (OdbcConnection connection = new OdbcConnection(Helper.ConnectionString("postgres_music_serban")))
                 {
+                    string sql;
+
+                    object obj = new
+                    {
+                        @StageName = StageName,
+                        @FirstName = FirstName,
+                        @LastName = LastName,
+                        @Origin = Origin,
+                        @Birthdate = Birthdate?.ToShortDateString()
+                    };
+                        
                     if (ID == null)
                     {
-                        connection.Execute($"INSERT INTO Artist(StageName, FirstName, LastName, Origin, Birthdate) VALUES ('{StageName}', '{FirstName}', '{LastName}', '{Origin}', '{Birthdate?.ToShortDateString()}')");
+                        sql = $"INSERT INTO Artist(StageName, FirstName, LastName, Origin, Birthdate) VALUES ( ?, ?, ?, ?, ?)";
                     }
                     else
                     {
-                        connection.Execute($"UPDATE Artist SET StageName = '{StageName}', FirstName = '{FirstName}', LastName = '{LastName}', Origin = '{Origin}', Birthdate = '{Birthdate?.ToShortDateString()}' WHERE Id = {ID}");
+                        sql = $"UPDATE Artist SET StageName = ?, FirstName = ?, LastName = ?, Origin = ?, Birthdate = ? WHERE Id = {ID}";
                     }
 
-                    if(Bands != null)
+                    connection.Execute(sql,obj);
+
+                    // Bands
+                    if (Bands != null)
                     {
                         List<String> values = new List<String>();
 
@@ -191,11 +205,12 @@ namespace Foo.Models
                             values.Add($"({band.ID},{ID})");
                         }
 
-                        string sql = $"DELETE FROM BandArtist WHERE ArtistID = {ID}; INSERT INTO BandArtist VALUES {string.Join(",", values)};";
+                        sql = $"DELETE FROM BandArtist WHERE ArtistID = {ID}; INSERT INTO BandArtist VALUES {string.Join(",", values)};";
 
                         connection.Execute(sql);
                     }
 
+                    // Genres
                     if(Genres != null)
                     {
                         List<String> values = new List<String>();
@@ -205,7 +220,7 @@ namespace Foo.Models
                             values.Add($"({ID},{genre.ID})");
                         }
 
-                        string sql = $"DELETE FROM ArtistGenre WHERE ArtistID = {ID}; INSERT INTO ArtistGenre VALUES {string.Join(", ", values)};";
+                        sql = $"DELETE FROM ArtistGenre WHERE ArtistID = {ID}; INSERT INTO ArtistGenre VALUES {string.Join(", ", values)};";
                          
                         connection.Execute(sql);
                     }
@@ -219,7 +234,7 @@ namespace Foo.Models
                             values.Add($"({ID},{album.ID})");
                         }
 
-                        string sql = $"DELETE FROM ArtistAlbum WHERE ArtistID = {ID}; INSERT INTO ArtistAlbum VALUES {string.Join(", ", values)};";
+                        sql = $"DELETE FROM ArtistAlbum WHERE ArtistID = {ID}; INSERT INTO ArtistAlbum VALUES {string.Join(", ", values)};";
 
                         connection.Execute(sql);
                     }

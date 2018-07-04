@@ -45,7 +45,7 @@ namespace Foo.ViewModels
                         Bands = new List<Band> { Band.Find((int)FilterBand.ID) };
                     }
 
-                    string sql = "SELECT * FROM Artist";
+                    string sql = "SELECT * FROM Band";
 
                     List<string> filters = new List<string>();
 
@@ -60,7 +60,7 @@ namespace Foo.ViewModels
                     if (FilterBand.Name != "")
                     {
                         filters.Add("Name ILIKE ?");
-                        parameters.Add("FirstName", "%" + FilterBand.Name + "%");
+                        parameters.Add("Name", "%" + FilterBand.Name + "%");
                     }
 
                     if (FilterBand.Origin != "")

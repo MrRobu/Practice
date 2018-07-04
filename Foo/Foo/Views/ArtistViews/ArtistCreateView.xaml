@@ -34,39 +34,142 @@
 
         <Grid Grid.Row="3" Grid.Column="1">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="auto" MaxHeight="250"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Grid.Column="1" Background="White" MaxWidth="400" Margin="0,20,0,0">
+            <Grid Grid.Row="0" Grid.Column="1" MaxWidth="400" Margin="0,20,0,0" Background="White">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
-                <Label Grid.Row="1" Grid.Column="0" Content="Stagename" Margin="10"/>
-                <TextBox Grid.Row="1" Grid.Column="1" x:Name="Artist_Stagename" MinWidth="100" Foreground="Black" Margin="10"/>
+                <Label Grid.Row="1" Grid.Column="0" Content="Stage Name" Margin="10"/>
+                <TextBox Grid.Row="1" Grid.Column="1" x:Name="Artist_StageName" MinWidth="100" Foreground="Black" Margin="10"/>
 
-                <Label Grid.Row="2" Grid.Column="0" Content="Firstname" Margin="10"/>
-                <TextBox Grid.Row="2" Grid.Column="1" x:Name="Artist_Firstname" MinWidth="100" Foreground="Black" Margin="10"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="First Name" Margin="10"/>
+                <TextBox Grid.Row="2" Grid.Column="1" x:Name="Artist_FirstName" MinWidth="100" Foreground="Black" Margin="10"/>
 
-                <Label Grid.Row="3" Grid.Column="0" Content="Lastname" Margin="10"/>
-                <TextBox Grid.Row="3" Grid.Column="1" x:Name="Artist_Lastname" MinWidth="100" Foreground="Black" Margin="10"/>
+                <Label Grid.Row="3" Grid.Column="0" Content="Last Name" Margin="10"/>
+                <TextBox Grid.Row="3" Grid.Column="1" x:Name="Artist_LastName" MinWidth="100" Foreground="Black" Margin="10"/>
 
-                <Label Grid.Row="4" Grid.Column="0" Content="Birthdate" Margin="10"/>
-                <TextBox Grid.Row="4" Grid.Column="1" x:Name="Artist_Birthdate" MinWidth="100" Foreground="Black" Margin="10"/>
+                <Label Grid.Row="4" Grid.Column="0" Content="Origin" Margin="10"/>
+                <TextBox Grid.Row="4" Grid.Column="1" x:Name="Artist_Origin" MinWidth="100" Foreground="Black" Margin="10"/>
+
+                <Label Grid.Row="5" Grid.Column="0" Content="Birthdate" Margin="10"/>
+                <DatePicker x:Name="Artist_Birthdate" Grid.Row="5" Grid.Column="1" Foreground="Black" Focusable="False" Margin="10"/>
+            </Grid>
+
+            <Grid Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Top" Margin="0,20,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Bands" FontSize="25" HorizontalAlignment="Center" Grid.ColumnSpan="2" Foreground="Black" FontFamily="Segoe UI Light"/>
+
+                <ListBox Grid.Row="1" Grid.ColumnSpan="2" x:Name="Artist_Bands" SelectedItem="{Binding BandToRemove}" VerticalAlignment="Top" Background="White" Margin="0,5,0,5">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Name}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <ComboBox x:Name="Bands" Grid.Row="2" Grid.ColumnSpan="2" SelectedItem="{Binding BandToAdd}" Background="White" Foreground="Black" Padding="10">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <Button Grid.Row="3" Grid.Column="0" x:Name="RemoveBand" Content="Remove" Background="IndianRed" BorderBrush="IndianRed" Margin="5"/>
+                <Button Grid.Row="3" Grid.Column="1" x:Name="AddBand" Content="Add" Background="LightSeaGreen" BorderBrush="LightGreen" Margin="5"/>
+            </Grid>
+
+            <Grid Grid.Column="5" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Top" Margin="0,20,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Genres" FontSize="25" HorizontalAlignment="Center" Grid.ColumnSpan="2" Foreground="Black" FontFamily="Segoe UI Light"/>
+
+                <ListBox Grid.Row="1" Grid.ColumnSpan="2" x:Name="Artist_Genres" SelectedItem="{Binding GenreToRemove}" VerticalAlignment="Top" Background="White" Margin="0,5,0,5">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Title}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <ComboBox x:Name="Genres" Grid.Row="2" Grid.ColumnSpan="2" SelectedItem="{Binding GenreToAdd}" Background="White" Foreground="Black" Padding="10">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Title}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <Button Grid.Row="3" Grid.Column="0" x:Name="RemoveGenre" Content="Remove" Background="IndianRed" BorderBrush="IndianRed" Margin="5"/>
+                <Button Grid.Row="3" Grid.Column="1" x:Name="AddGenre" Content="Add" Background="LightSeaGreen" BorderBrush="LightGreen" Margin="5"/>
+            </Grid>
+
+            <Grid Grid.Column="7" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Top" Margin="0,20,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Albums" FontSize="25" HorizontalAlignment="Center" Grid.ColumnSpan="2" Foreground="Black" FontFamily="Segoe UI Light"/>
+
+                <ListBox Grid.Row="1" Grid.ColumnSpan="2" x:Name="Artist_Albums" SelectedItem="{Binding AlbumToRemove}" VerticalAlignment="Top" Background="White" Margin="0,5,0,5">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Grid.Column="0" Text="{Binding Path=Title}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </Grid>
         </Grid>
     </Grid>

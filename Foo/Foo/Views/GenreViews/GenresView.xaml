@@ -73,7 +73,7 @@
             </Grid>
 
             <Grid Grid.Row="0" Grid.Column="2" Margin="20">
-                <DataGrid Name="GenreDataGrid" Background="White" ItemsSource="{Binding Path=Genres}" MinWidth="200"
+                <DataGrid Name="GenreDataGrid" Background="White" ItemsSource="{Binding Path=Genres}"
                           AutoGenerateColumns="False" SelectedItem="{Binding Path=SelectedGenre}" 
                           ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True" SelectionUnit="FullRow" 
                           SelectionMode="Single" Height="auto" SelectionChanged="GenreDataGrid_SelectionChanged">

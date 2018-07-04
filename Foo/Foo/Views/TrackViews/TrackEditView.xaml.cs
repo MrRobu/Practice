@@ -24,5 +24,17 @@ namespace Foo.Views
         {
             InitializeComponent();
         }
+
+        //private void Albums_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    if (e.Key == Key.Back)
+        //        Albums.SelectedItem = null;
+        //}
+
+        //private void Genres_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    if (e.Key == Key.Back)
+        //        Genres.SelectedItem = null;
+        //}
     }
 }

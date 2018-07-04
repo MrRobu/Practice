@@ -14,10 +14,16 @@ namespace Foo.ViewModels
         public TrackEditViewModel(int id)
         {
             Track = Track.Find(id);
+
+            if (Track.Genre != null)
+                SelectedGenre = Genres.Where(g => g.ID == Track.Genre.ID).First();
+
+            if (Track.Album != null)
+                SelectedAlbum = Albums.Where(a => a.ID == Track.Album.ID).First();
         }
 
         #region Track
-        public Track Track { get; }
+        public Track Track { get; set; }
 
         public void DeleteArtist()
         {
@@ -37,10 +43,19 @@ namespace Foo.ViewModels
             if (Track.Title == "")
                 errors.Add("Title is mandatory!");
 
-            if (errors.Count == 0 && Track.Save())
+            if (errors.Count == 0)
             {
-                ShellViewModel.Instance.ActivateItem(new TracksViewModel());
-                MessageBox.Show("Track successfully updated!");
+                if (SelectedAlbum != null)
+                    Track.Album = SelectedAlbum;
+
+                if (SelectedGenre != null)
+                    Track.Genre = SelectedGenre;
+
+                if(Track.Save())
+                {
+                    ShellViewModel.Instance.ActivateItem(new TracksViewModel());
+                    MessageBox.Show("Track successfully updated!");
+                }
             }
             else
             {
@@ -52,13 +67,13 @@ namespace Foo.ViewModels
         #region Album
         public List<Album> Albums { get; } = Album.All();
 
-        //public Album SelectedAlbum { get; set; }
+        public Album SelectedAlbum { get; set; }
         #endregion
 
         #region Genre
         public List<Genre> Genres { get; } = Genre.All();
 
-        //public Genre SelectedGenre { get; set; }
+        public Genre SelectedGenre { get; set; }
         #endregion
     }
 }

@@ -45,7 +45,7 @@ namespace Foo.ViewModels
                         FooUsers = new List<FooUser> { FooUser.Find((int)FilterFooUser.ID) };
                     }
 
-                    string sql = "SELECT * FROM Artist";
+                    string sql = "SELECT * FROM FooUser";
 
                     List<string> filters = new List<string>();
 

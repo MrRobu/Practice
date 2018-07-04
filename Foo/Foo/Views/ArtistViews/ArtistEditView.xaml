@@ -172,17 +172,6 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-
-                <ComboBox x:Name="Albums" Grid.Row="2" Grid.ColumnSpan="2" SelectedItem="{Binding AlbumToAdd}" Background="White" Foreground="Black" Padding="10">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Path=Title}"/>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-
-                <Button Grid.Row="3" Grid.Column="0" x:Name="RemoveAlbum" Content="Remove" Background="IndianRed" BorderBrush="IndianRed" Margin="5"/>
-                <Button Grid.Row="3" Grid.Column="1" x:Name="AddAlbum" Content="Add" Background="LightSeaGreen" BorderBrush="LightGreen" Margin="5"/>
             </Grid>
 
             <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="8">

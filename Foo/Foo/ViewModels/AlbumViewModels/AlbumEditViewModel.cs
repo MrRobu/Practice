@@ -47,9 +47,15 @@ namespace Foo.ViewModels
             if (errors.Count == 0)
             {
                 if (SelectedArtist != null)
+                {
                     Album.Artist = SelectedArtist;
+                    Album.Band = null;
+                }
                 if (SelectedBand != null)
+                {
                     Album.Band = SelectedBand;
+                    Album.Artist = null;
+                }
 
                 if(Album.Save())
                 {
@@ -91,30 +97,6 @@ namespace Foo.ViewModels
                 _selectedBand = value;
                 NotifyOfPropertyChange(() => SelectedBand);
             }
-        }
-        #endregion
-
-        #region Tracks
-        public ObservableCollection<Track> Tracks { get; } = new ObservableCollection<Track>(Track.Available());
-
-        public Track TrackToAdd { get; set; }
-
-        public Track TrackToRemove { get; set; }
-
-        public void AddTrack()
-        {
-            if (TrackToAdd == null) return;
-
-            Album.Tracks.Add(TrackToAdd);
-            Tracks.Remove(TrackToAdd);
-        }
-
-        public void RemoveTrack()
-        {
-            if (TrackToRemove == null) return;
-
-            Tracks.Add(TrackToRemove);
-            Album.Tracks.Remove(TrackToRemove);
         }
         #endregion
     }

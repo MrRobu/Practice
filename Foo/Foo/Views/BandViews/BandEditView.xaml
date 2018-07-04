@@ -90,7 +90,7 @@
                 <ListBox Grid.Row="1" Grid.ColumnSpan="2" x:Name="Band_Artists" SelectedItem="{Binding ArtistToRemove}" VerticalAlignment="Top" Background="White" Margin="0,5,0,5">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=Name}"/>
+                            <TextBlock Text="{Binding Path=StageName}"/>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
@@ -98,7 +98,7 @@
                 <ComboBox x:Name="Artists" Grid.Row="2" Grid.ColumnSpan="2" SelectedItem="{Binding ArtistToAdd}" Background="White" Foreground="Black" Padding="10">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=Name}"/>
+                            <TextBlock Text="{Binding Path=StageName}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -155,24 +155,13 @@
 
                 <TextBlock Grid.Row="0" Text="Albums" FontSize="25" HorizontalAlignment="Center" Grid.ColumnSpan="2" Foreground="Black" FontFamily="Segoe UI Light"/>
 
-                <ListBox Grid.Row="1" Grid.ColumnSpan="2" x:Name="Artist_Albums" SelectedItem="{Binding AlbumToRemove}" VerticalAlignment="Top" Background="White" Margin="0,5,0,5">
+                <ListBox Grid.Row="1" Grid.ColumnSpan="2" x:Name="Band_Albums" VerticalAlignment="Top" Background="White" Margin="0,5,0,5">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Grid.Column="0" Text="{Binding Path=Title}"/>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-
-                <ComboBox x:Name="Albums" Grid.Row="2" Grid.ColumnSpan="2" SelectedItem="{Binding AlbumToAdd}" Background="White" Foreground="Black" Padding="10">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Path=Title}"/>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-
-                <Button Grid.Row="3" Grid.Column="0" x:Name="RemoveAlbum" Content="Remove" Background="IndianRed" BorderBrush="IndianRed" Margin="5"/>
-                <Button Grid.Row="3" Grid.Column="1" x:Name="AddAlbum" Content="Add" Background="LightSeaGreen" BorderBrush="LightGreen" Margin="5"/>
             </Grid>
 
             <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="8">

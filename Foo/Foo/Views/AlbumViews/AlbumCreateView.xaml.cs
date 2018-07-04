@@ -24,5 +24,17 @@ namespace Foo.Views
         {
             InitializeComponent();
         }
+
+        private void BandComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (BandComboBox.SelectedItem != null)
+                ArtistComboBox.SelectedItem = null;
+        }
+
+        private void ArtistComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ArtistComboBox.SelectedItem != null)
+                BandComboBox.SelectedItem = null;
+        }
     }
 }

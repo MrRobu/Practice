@@ -2,6 +2,7 @@
 using Foo.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,10 +15,19 @@ namespace Foo.ViewModels
         public PlaylistEditViewModel(int id)
         {
             Playlist = Playlist.Find(id);
+            SelectedFooUser = FooUsers.Find(u => u.ID == Playlist.FooUserID);
+
+            var ids = (from pt in Playlist.Tracks select pt.ID);
+            Tracks = new ObservableCollection<Track>();
+            foreach (var t in Track.All())
+            {
+                if (!ids.Contains(t.ID))
+                    Tracks.Add(t);
+            }
         }
 
         #region Playlist
-        public Playlist Playlist { get; }
+        public Playlist Playlist { get; set; }
 
         public void DeletePlaylist()
         {
@@ -36,13 +46,19 @@ namespace Foo.ViewModels
 
             if (Playlist.Title == "")
                 errors.Add("Title is mandatory!");
-            if (Playlist.FooUser.UserName == "")
-                errors.Add("UserName is mandatory!");
+            if (Playlist.FooUser == null)
+                errors.Add("FooUser is mandatory!");
 
-            if (errors.Count == 0 && Playlist.Save())
+            if (errors.Count == 0 )
             {
-                ShellViewModel.Instance.ActivateItem(new PlaylistsViewModel());
-                MessageBox.Show("Playlist successfully updated!");
+                if (SelectedFooUser != null)
+                    Playlist.FooUser = SelectedFooUser;
+
+                if(Playlist.Save())
+                {
+                    ShellViewModel.Instance.ActivateItem(new PlaylistsViewModel());
+                    MessageBox.Show("Playlist successfully updated!");
+                }
             }
             else
             {
@@ -51,6 +67,36 @@ namespace Foo.ViewModels
         }
         #endregion
 
-        public List<FooUser> FooUsers { get; } = FooUser.All(); 
+        #region FooUser
+        public List<FooUser> FooUsers { get; } = FooUser.All();
+
+        public FooUser SelectedFooUser { get; set; }
+        #endregion
+
+        #region Tracks
+        public ObservableCollection<Track> Tracks { get; set; }
+
+        public Track TrackToAdd { get; set; }
+
+        public Track TrackToRemove { get; set; }
+
+        public void RemoveTrack()
+        {
+            if(TrackToRemove != null)
+            {
+                Tracks.Add(TrackToRemove);
+                Playlist.Tracks.Remove(TrackToRemove);
+            }
+        }
+
+        public void AddTrack()
+        {
+            if (TrackToAdd != null)
+            {
+                Playlist.Tracks.Add(TrackToAdd);
+                Tracks.Remove(TrackToAdd);
+            }
+        }
+        #endregion
     }
 }

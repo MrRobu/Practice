@@ -3,6 +3,7 @@ using Dapper;
 using Foo.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Odbc;
 using System.Linq;
 using System.Text;
@@ -13,17 +14,14 @@ namespace Foo.ViewModels
 {
     public class TracksViewModel : Screen
     {
-        private List<Track> _tracks;
-
         public TracksViewModel()
         {
             Tracks = Track.All();
-            FilterTrack = new Track();
         }
 
         public void LoadTrackCreateView()
         {
-            ShellViewModel.Instance?.ActivateItem(new TrackCreateViewModel());
+            ShellViewModel.Instance.ActivateItem(new TrackCreateViewModel());
         }
 
         public void LoadTrackEditView()
@@ -32,7 +30,7 @@ namespace Foo.ViewModels
                 ShellViewModel.Instance.ActivateItem(new TrackEditViewModel((int)SelectedTrack.ID));
         }
 
-        public Track FilterTrack { get; set; }
+        public Track FilterTrack { get; set; } = new Track();
 
         public void Filter()
         {
@@ -45,7 +43,7 @@ namespace Foo.ViewModels
                         Tracks = new List<Track> { Track.Find((int)FilterTrack.ID) };
                     }
 
-                    string sql = "SELECT * FROM Artist";
+                    string sql = "SELECT * FROM Track";
 
                     List<string> filters = new List<string>();
 
@@ -63,13 +61,17 @@ namespace Foo.ViewModels
                         parameters.Add("Title", "%" + FilterTrack.Title + "%");
                     }
 
-                    //if(FilterTrack.Genre.Title)
+                    if(FilterTrack.Genre != null)
+                    {
+                        filters.Add("GenreID = ?");
+                        parameters.Add("GenreID", FilterTrack.Genre.ID);
+                    }
 
-                    //if (FilterTrack.Album.Title != "")
-                    //{
-                    //    filters.Add(" ILIKE ?");
-                    //    parameters.Add("Origin", "%" + FilterBand.Origin + "%");
-                    //}
+                    if (FilterTrack.Album != null)
+                    {
+                        filters.Add("AlbumID = ?");
+                        parameters.Add("AlbumID", FilterTrack.Album.ID);
+                    }
 
                     if (filters.Count > 0)
                         sql += " WHERE " + string.Join(" AND ", filters);
@@ -79,9 +81,11 @@ namespace Foo.ViewModels
             }
             catch (OdbcException error)
             {
-                MessageBox.Show(error.Message);
+                MessageBox.Show($"Class: TracksViewModel\nMethod: Filter\nError: {error.Message}");
             }
         }
+
+        private List<Track> _tracks;
 
         public List<Track> Tracks
         {
@@ -96,6 +100,10 @@ namespace Foo.ViewModels
             }
         }
 
-        public Band SelectedTrack { get; set; }
+        public List<Album> Albums { get; } = Album.All();
+
+        public List<Genre> Genres { get; } = Genre.All();
+
+        public Track SelectedTrack { get; set; }
     }
 }

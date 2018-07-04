@@ -45,7 +45,7 @@ namespace Foo.ViewModels
                         Genres = new List<Genre> { Genre.Find((int)FilterGenre.ID) };
                     }
 
-                    string sql = "SELECT * FROM Artist";
+                    string sql = "SELECT * FROM Genre";
 
                     List<string> filters = new List<string>();
 

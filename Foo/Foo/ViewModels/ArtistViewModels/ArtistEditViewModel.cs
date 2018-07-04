@@ -17,10 +17,26 @@ namespace Foo.ViewModels
         public ArtistEditViewModel(int id)
         {
             Artist = Artist.Find(id);
+
+            var bandIds = (from ab in Artist.Bands select ab.ID);
+            Bands = new ObservableCollection<Band>();
+            foreach (var b in Band.All())
+            {
+                if (!bandIds.Contains(b.ID))
+                    Bands.Add(b);
+            }
+
+            var genreIds = (from ag in Artist.Genres select ag.ID);
+            Genres = new ObservableCollection<Genre>();
+            foreach (var g in Genre.All())
+            {
+                if (!genreIds.Contains(g.ID))
+                    Genres.Add(g);
+            }
         }
 
         #region Artist
-        public Artist Artist { get; }
+        public Artist Artist { get; set; }
 
         public void DeleteArtist()
         {
@@ -55,30 +71,31 @@ namespace Foo.ViewModels
         #endregion
 
         #region Bands
-        public List<Playlist> Bands { get; } = Playlist.All();
+        public ObservableCollection<Band> Bands { get; set; }
 
-        public Playlist BandToAdd { get; set; }
+        public Band BandToAdd { get; set; }
 
-        public Playlist BandToRemove { get; set; }
+        public Band BandToRemove { get; set; }
 
-        public void AddBand()
+        public void AddArtist()
         {
-            if (BandToAdd == null || Artist.Bands.Contains(BandToAdd))
-                return;
+            if (BandToAdd == null) return;
 
             Artist.Bands.Add(BandToAdd);
+            Bands.Remove(BandToAdd);
         }
 
         public void RemoveBand()
         {
             if (BandToRemove == null) return;
 
+            Bands.Add(BandToRemove);
             Artist.Bands.Remove(BandToRemove);
         }
         #endregion
 
         #region Genres
-        public List<Genre> Genres { get; } = Genre.All();
+        public ObservableCollection<Genre> Genres { get; set; }
 
         public Genre GenreToAdd { get; set; }
 
@@ -86,40 +103,18 @@ namespace Foo.ViewModels
 
         public void AddGenre()
         {
-            if (GenreToAdd == null || Artist.Genres.Contains(GenreToAdd))
-                return;
+            if (GenreToAdd == null) return;
 
             Artist.Genres.Add(GenreToAdd);
+            Genres.Remove(GenreToAdd);
         }
 
         public void RemoveGenre()
         {
             if (GenreToRemove == null) return;
 
+            Genres.Add(GenreToRemove);
             Artist.Genres.Remove(GenreToRemove);
-        }
-        #endregion
-
-        #region Albums
-        public List<Album> Albums { get; } = Album.Available();
-
-        public Album AlbumToAdd { get; set; }
-
-        public Album AlbumToRemove { get; set; }
-
-        public void AddAlbum()
-        {
-            if (AlbumToAdd == null || Artist.Albums.Contains(AlbumToAdd))
-                return;
-
-            Artist.Albums.Add(AlbumToAdd);
-        }
-
-        public void RemoveAlbum()
-        {
-            if (AlbumToRemove == null) return;
-
-            Artist.Albums.Remove(AlbumToRemove);
         }
         #endregion
     }
